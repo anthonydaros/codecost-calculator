@@ -63,49 +63,48 @@ export const PricingCalculator = () => {
   };
 
   const calculateSupabaseCost = () => {
+    // Free Plan Limits
     const FREE_USERS = 50000;
     const FREE_STORAGE = 1; // 1GB
     const FREE_DATABASE = 0.5; // 500MB
 
+    // Pro Plan Limits
     const PRO_USERS = 100000;
     const PRO_STORAGE = 100; // 100GB
     const PRO_DATABASE = 8; // 8GB
 
-    const EXTRA_USER_COST = 0.00325;
-    const EXTRA_STORAGE_COST = 0.021;
-    const EXTRA_DATABASE_COST = 0.125;
+    // Cost per unit for exceeding Pro limits
+    const EXTRA_USER_COST = 0.00325; // per user
+    const EXTRA_STORAGE_COST = 0.021; // per GB
+    const EXTRA_DATABASE_COST = 0.125; // per GB
 
     let totalCost = 0;
-    
-    // Convert records to GB for calculation
-    const recordsInGB = supabaseRecords / 2700000;
+    const recordsInGB = supabaseRecords / 2700000; // Convert records to GB
 
-    // Check if Pro plan is needed (when any limit is exceeded)
-    if (supabaseUsers > FREE_USERS || 
-        supabaseStorage > FREE_STORAGE || 
-        recordsInGB > FREE_DATABASE) {
-      totalCost += 25; // Add Pro plan cost
+    // Check if Pro Plan is needed
+    const needsProPlan = 
+      supabaseUsers > FREE_USERS ||
+      supabaseStorage > FREE_STORAGE ||
+      recordsInGB > FREE_DATABASE;
+
+    if (needsProPlan) {
+      totalCost += 25; // Base Pro Plan cost
     }
 
-    // Calculate extra costs for users beyond Pro plan limit
+    // Calculate extra costs beyond Pro Plan limits
     if (supabaseUsers > PRO_USERS) {
       const extraUsers = supabaseUsers - PRO_USERS;
-      const extraUsersCost = extraUsers * EXTRA_USER_COST;
-      totalCost += extraUsersCost;
+      totalCost += extraUsers * EXTRA_USER_COST;
     }
 
-    // Calculate extra costs for storage beyond Pro plan limit
     if (supabaseStorage > PRO_STORAGE) {
       const extraStorage = supabaseStorage - PRO_STORAGE;
-      const extraStorageCost = extraStorage * EXTRA_STORAGE_COST;
-      totalCost += extraStorageCost;
+      totalCost += extraStorage * EXTRA_STORAGE_COST;
     }
 
-    // Calculate extra costs for database records beyond Pro plan limit
     if (recordsInGB > PRO_DATABASE) {
       const extraDB = recordsInGB - PRO_DATABASE;
-      const extraDBCost = extraDB * EXTRA_DATABASE_COST;
-      totalCost += extraDBCost;
+      totalCost += extraDB * EXTRA_DATABASE_COST;
     }
 
     return totalCost;
