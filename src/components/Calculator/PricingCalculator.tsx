@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { CalculatorSection } from "./CalculatorSection";
 import { Slider } from "@/components/ui/slider";
 import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 import {
   Select,
   SelectContent,
@@ -9,7 +10,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Button } from "@/components/ui/button";
+import { useToast } from "@/components/ui/use-toast";
 
 const lovablePlans = [
   { name: "Free", messages: 5, price: 0 },
@@ -31,6 +32,7 @@ const MONTHLY_BONUS_MESSAGES = DAILY_BONUS_MESSAGES * DAYS_IN_MONTH;
 type DeploymentOption = "netlify" | "vercel" | "vps" | null;
 
 export const PricingCalculator = () => {
+  const { toast } = useToast();
   const [lovableTokens, setLovableTokens] = useState(100);
   const [recommendedPlan, setRecommendedPlan] = useState(lovablePlans[0]);
   const [selectedDeployment, setSelectedDeployment] = useState<DeploymentOption>(null);
@@ -42,6 +44,8 @@ export const PricingCalculator = () => {
   const [profitMargin, setProfitMargin] = useState(30);
   const [maintenancePercentage, setMaintenancePercentage] = useState(10);
   const [vpsPrice, setVpsPrice] = useState<number>(0);
+  const [showInBRL, setShowInBRL] = useState(false);
+  const [exchangeRate, setExchangeRate] = useState(5); // Default exchange rate
 
   const calculateLovableCost = () => {
     return recommendedPlan.price;
@@ -151,6 +155,44 @@ export const PricingCalculator = () => {
     }
   };
 
+  const calculateDevelopmentTotalWithMargin = () => {
+    const developmentCost = calculateDevelopmentCost();
+    return developmentCost * (1 + profitMargin / 100);
+  };
+
+  const calculateMonthlyTotalWithMargin = () => {
+    const monthlyCosts = calculateMonthlyCosts();
+    return monthlyCosts * (1 + profitMargin / 100);
+  };
+
+  const fetchExchangeRate = async () => {
+    try {
+      const response = await fetch('https://api.exchangerate-api.com/v4/latest/USD');
+      const data = await response.json();
+      setExchangeRate(data.rates.BRL);
+      setShowInBRL(true);
+      toast({
+        title: "Cotação atualizada",
+        description: `1 USD = ${data.rates.BRL} BRL`,
+      });
+    } catch (error) {
+      toast({
+        title: "Erro ao buscar cotação",
+        description: "Usando taxa padrão de 5 BRL",
+        variant: "destructive",
+      });
+      setExchangeRate(5);
+      setShowInBRL(true);
+    }
+  };
+
+  const formatCurrency = (value: number) => {
+    if (showInBRL) {
+      return `R$ ${(value * exchangeRate).toFixed(2)}`;
+    }
+    return `$${value.toFixed(2)}`;
+  };
+
   return (
     <div className="max-w-7xl mx-auto space-y-6 p-6">
       <div className="flex justify-center items-center gap-8 mb-12">
@@ -194,7 +236,7 @@ export const PricingCalculator = () => {
                   {recommendedPlan.price > 0 && ` + ${MONTHLY_BONUS_MESSAGES} mensagens bônus mensal`}
                 </p>
                 <p className="text-sm text-gray-400">
-                  Preço: ${recommendedPlan.price}
+                  Preço: {formatCurrency(recommendedPlan.price)}
                 </p>
               </div>
               <div className="space-y-2">
@@ -319,42 +361,64 @@ export const PricingCalculator = () => {
               <div className="pt-4 border-t border-white/10">
                 <div className="space-y-4">
                   <div>
-                    <p className="text-lg font-semibold border-b border-white/10 pb-2">Custos de Desenvolvimento (único)</p>
+                    <p className="text-lg font-semibold border-b border-white/10 pb-2">
+                      Custos de Desenvolvimento (único)
+                    </p>
                     <div className="space-y-2 mt-2">
                       <div>
                         <p className="text-sm text-gray-400">Lovable.dev</p>
-                        <p className="text-lg">${calculateLovableCost()}</p>
+                        <p className="text-lg">{formatCurrency(calculateLovableCost())}</p>
                       </div>
                       <div>
                         <p className="text-sm text-gray-400">Cursor</p>
-                        <p className="text-lg">${calculateCursorCost()}</p>
+                        <p className="text-lg">{formatCurrency(calculateCursorCost())}</p>
+                      </div>
+                      <div className="pt-2 border-t border-white/10">
+                        <p className="text-sm text-gray-400">Total (com margem)</p>
+                        <p className="text-lg font-bold neon-glow">
+                          {formatCurrency(calculateDevelopmentTotalWithMargin())}
+                        </p>
                       </div>
                     </div>
                   </div>
                   <div>
-                    <p className="text-lg font-semibold border-b border-white/10 pb-2">Custos Mensais</p>
+                    <p className="text-lg font-semibold border-b border-white/10 pb-2">
+                      Custos Mensais
+                    </p>
                     <div className="space-y-2 mt-2">
                       <div>
                         <p className="text-sm text-gray-400">Supabase</p>
-                        <p className="text-lg">${(calculateSupabaseCost() / 12).toFixed(2)}</p>
+                        <p className="text-lg">{formatCurrency(calculateSupabaseCost())}</p>
                       </div>
                       {maintenancePercentage > 0 && (
                         <div>
                           <p className="text-sm text-gray-400">Manutenção Sugerida</p>
-                          <p className="text-lg">${((calculateDevelopmentCost() * maintenancePercentage) / 100).toFixed(2)}</p>
+                          <p className="text-lg">
+                            {formatCurrency((calculateDevelopmentCost() * maintenancePercentage) / 100)}
+                          </p>
                         </div>
                       )}
                       <div className="pt-2 border-t border-white/10">
-                        <p className="text-sm text-gray-400">Total Mensal</p>
-                        <p className="text-lg font-bold">${calculateMonthlyCosts().toFixed(2)}</p>
+                        <p className="text-sm text-gray-400">Total (com margem)</p>
+                        <p className="text-lg font-bold neon-glow">
+                          {formatCurrency(calculateMonthlyTotalWithMargin())}
+                        </p>
                       </div>
                     </div>
                   </div>
-                  <div className="pt-4 border-t border-white/10">
-                    <p className="text-sm text-gray-400">Total (com margem)</p>
-                    <p className="text-2xl font-bold neon-glow">
-                      ${totalCost().toFixed(2)}
-                    </p>
+                  <div className="pt-4 border-t border-white/10 flex justify-end">
+                    <Button
+                      onClick={fetchExchangeRate}
+                      className="flex items-center gap-2"
+                      variant={showInBRL ? "default" : "outline"}
+                    >
+                      <img
+                        src="https://flagcdn.com/w20/br.png"
+                        alt="Bandeira do Brasil"
+                        className="w-5 h-auto"
+                      />
+                      {showInBRL ? "Mostrar em USD" : "Mostrar em BRL"}
+                    </Button>
                   </div>
                 </div>
               </div>
