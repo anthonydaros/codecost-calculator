@@ -50,6 +50,17 @@ export const PricingCalculator = () => {
   const [showInBRL, setShowInBRL] = useState(false);
   const [exchangeRate, setExchangeRate] = useState(5); // Default exchange rate
 
+  const formatCurrency = (value: number): string => {
+    if (showInBRL) {
+      return `R$ ${(value * exchangeRate).toFixed(2)}`;
+    }
+    return `$${value.toFixed(2)}`;
+  };
+
+  const toggleCurrency = () => {
+    setShowInBRL(!showInBRL);
+  };
+
   const calculateLovableCost = () => {
     return recommendedPlan.price;
   };
@@ -215,39 +226,37 @@ export const PricingCalculator = () => {
     return monthlyCosts * (1 + profitMargin / 100);
   };
 
-  const renderPDFDownload = () => {
-    return (
-      <PDFDownloadLink
-        document={
-          <CostReportPDF
-            lovableTokens={lovableTokens}
-            recommendedPlan={recommendedPlan}
-            supabaseUsers={supabaseUsers}
-            supabaseRecords={supabaseRecords}
-            supabaseStorage={supabaseStorage}
-            cursorPlan={cursorPlan}
-            profitMargin={profitMargin}
-            maintenancePercentage={maintenancePercentage}
-            developmentTotal={calculateDevelopmentTotalWithMargin()}
-            monthlyTotal={calculateMonthlyTotalWithMargin()}
-            showInBRL={showInBRL}
-            exchangeRate={exchangeRate}
-          />
-        }
-        fileName="cost-report.pdf"
-      >
-        {({ loading }) => (
-          <Button 
-            className="w-full mt-4" 
-            disabled={loading}
-          >
-            <Download className="w-4 h-4 mr-2" />
-            {loading ? "Generating PDF..." : "Export PDF"}
-          </Button>
-        )}
-      </PDFDownloadLink>
-    );
-  };
+  const renderPDFDownload = () => (
+    <PDFDownloadLink
+      document={
+        <CostReportPDF
+          lovableTokens={lovableTokens}
+          recommendedPlan={recommendedPlan}
+          supabaseUsers={supabaseUsers}
+          supabaseRecords={supabaseRecords}
+          supabaseStorage={supabaseStorage}
+          cursorPlan={cursorPlan}
+          profitMargin={profitMargin}
+          maintenancePercentage={maintenancePercentage}
+          developmentTotal={calculateDevelopmentTotalWithMargin()}
+          monthlyTotal={calculateMonthlyTotalWithMargin()}
+          showInBRL={showInBRL}
+          exchangeRate={exchangeRate}
+        />
+      }
+      fileName="cost-report.pdf"
+    >
+      {({ loading }) => (
+        <Button 
+          className="w-full mt-4" 
+          disabled={loading}
+        >
+          <Download className="w-4 h-4 mr-2" />
+          {loading ? "Generating PDF..." : "Export PDF"}
+        </Button>
+      )}
+    </PDFDownloadLink>
+  );
 
   return (
     <div className="max-w-7xl mx-auto space-y-6 p-6">
