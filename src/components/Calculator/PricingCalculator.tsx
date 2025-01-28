@@ -21,6 +21,10 @@ const lovablePlans = [
   { name: "Scale 7", messages: 5000, price: 900 },
 ];
 
+const DAILY_BONUS_MESSAGES = 5;
+const DAYS_IN_MONTH = 30;
+const MONTHLY_BONUS_MESSAGES = DAILY_BONUS_MESSAGES * DAYS_IN_MONTH;
+
 export const PricingCalculator = () => {
   const [lovableTokens, setLovableTokens] = useState(100);
   const [recommendedPlan, setRecommendedPlan] = useState(lovablePlans[0]);
@@ -44,8 +48,7 @@ export const PricingCalculator = () => {
   }, [lovableTokens]);
 
   const calculateLovableCost = () => {
-    // Se o número de tokens for menor ou igual a 5, é gratuito
-    if (lovableTokens <= 5) return 0;
+    if (lovableTokens <= MONTHLY_BONUS_MESSAGES) return 0;
     return recommendedPlan.price;
   };
 
@@ -131,7 +134,7 @@ export const PricingCalculator = () => {
                 <p className="text-sm text-gray-300">Plano Recomendado:</p>
                 <p className="text-lg font-semibold">{recommendedPlan.name}</p>
                 <p className="text-sm text-gray-400">
-                  Limite: {recommendedPlan.messages.toLocaleString()} mensagens
+                  Limite: {recommendedPlan.messages.toLocaleString()} mensagens + {MONTHLY_BONUS_MESSAGES} mensagens bônus mensal
                 </p>
                 <p className="text-sm text-gray-400">
                   Preço: ${recommendedPlan.price}
