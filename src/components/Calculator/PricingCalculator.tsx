@@ -34,9 +34,54 @@ export const PricingCalculator = () => {
   const [recommendedPlan, setRecommendedPlan] = useState(lovablePlans[0]);
   const [selectedDeployment, setSelectedDeployment] = useState<DeploymentOption>(null);
   
+  // Add missing state variables
+  const [supabaseUsers, setSupabaseUsers] = useState(1000);
+  const [supabaseRecords, setSupabaseRecords] = useState(100000);
+  const [supabaseStorage, setSupabaseStorage] = useState(1);
+  const [cursorPlan, setCursorPlan] = useState("Hobby");
+  const [profitMargin, setProfitMargin] = useState(30);
+  const [maintenancePercentage, setMaintenancePercentage] = useState(10);
+
+  // Add missing calculation functions
   const calculateLovableCost = () => {
     if (lovableTokens <= MONTHLY_BONUS_MESSAGES) return 0;
     return recommendedPlan.price;
+  };
+
+  const calculateSupabaseCost = () => {
+    // Basic calculation for Supabase cost
+    const usersCost = Math.floor(supabaseUsers / 50000) * 25;
+    const storageCost = supabaseStorage * 0.021;
+    const databaseCost = Math.floor(supabaseRecords / 8000000) * 25;
+    return usersCost + storageCost + databaseCost;
+  };
+
+  const calculateCursorCost = () => {
+    switch (cursorPlan) {
+      case "Pro":
+        return 20;
+      case "Business":
+        return 40;
+      default:
+        return 0;
+    }
+  };
+
+  const calculateDevelopmentCost = () => {
+    return calculateLovableCost() + calculateCursorCost();
+  };
+
+  const calculateMonthlyCosts = () => {
+    const supabaseMonthlyCost = calculateSupabaseCost();
+    const maintenanceCost = (calculateDevelopmentCost() * maintenancePercentage) / 100;
+    return supabaseMonthlyCost + maintenanceCost;
+  };
+
+  const totalCost = () => {
+    const developmentCost = calculateDevelopmentCost();
+    const monthlyCosts = calculateMonthlyCosts();
+    const totalWithoutMargin = developmentCost + monthlyCosts;
+    return totalWithoutMargin * (1 + profitMargin / 100);
   };
 
   useEffect(() => {
