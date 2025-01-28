@@ -246,7 +246,7 @@ export const PricingCalculator = () => {
       }
       fileName="cost-report.pdf"
     >
-      {({ loading }) => (
+      {({ loading }: { loading: boolean }) => (
         <Button 
           className="w-full mt-4" 
           disabled={loading}
