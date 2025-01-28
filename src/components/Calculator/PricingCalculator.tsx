@@ -193,6 +193,31 @@ export const PricingCalculator = () => {
     return `$${value.toFixed(2)}`;
   };
 
+  const toggleCurrency = async () => {
+    if (showInBRL) {
+      setShowInBRL(false);
+    } else {
+      try {
+        const response = await fetch('https://api.exchangerate-api.com/v4/latest/USD');
+        const data = await response.json();
+        setExchangeRate(data.rates.BRL);
+        setShowInBRL(true);
+        toast({
+          title: "Cotação atualizada",
+          description: `1 USD = ${data.rates.BRL} BRL`,
+        });
+      } catch (error) {
+        toast({
+          title: "Erro ao buscar cotação",
+          description: "Usando taxa padrão de 5 BRL",
+          variant: "destructive",
+        });
+        setExchangeRate(5);
+        setShowInBRL(true);
+      }
+    }
+  };
+
   return (
     <div className="max-w-7xl mx-auto space-y-6 p-6">
       <div className="flex justify-center items-center gap-8 mb-12">
@@ -381,6 +406,9 @@ export const PricingCalculator = () => {
                       </div>
                     </div>
                   </div>
+                  
+                  <div className="w-full h-px bg-gradient-to-r from-transparent via-white/50 to-transparent my-6 shadow-[0_0_5px_rgba(255,255,255,0.5)] animate-pulse" />
+                  
                   <div>
                     <p className="text-lg font-semibold border-b border-white/10 pb-2">
                       Custos Mensais
@@ -408,7 +436,7 @@ export const PricingCalculator = () => {
                   </div>
                   <div className="pt-4 border-t border-white/10 flex justify-end">
                     <Button
-                      onClick={fetchExchangeRate}
+                      onClick={toggleCurrency}
                       className="flex items-center gap-2"
                       variant={showInBRL ? "default" : "outline"}
                     >
