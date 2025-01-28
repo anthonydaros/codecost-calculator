@@ -11,6 +11,9 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useToast } from "@/components/ui/use-toast";
+import { PDFDownloadLink } from '@react-pdf/renderer';
+import { CostReportPDF } from './CostReportPDF';
+import { Download } from "lucide-react";
 
 const lovablePlans = [
   { name: "Free", messages: 5, price: 0 },
@@ -212,57 +215,38 @@ export const PricingCalculator = () => {
     return monthlyCosts * (1 + profitMargin / 100);
   };
 
-  const fetchExchangeRate = async () => {
-    try {
-      const response = await fetch('https://api.exchangerate-api.com/v4/latest/USD');
-      const data = await response.json();
-      setExchangeRate(data.rates.BRL);
-      setShowInBRL(true);
-      toast({
-        title: "Cotação atualizada",
-        description: `1 USD = ${data.rates.BRL} BRL`,
-      });
-    } catch (error) {
-      toast({
-        title: "Erro ao buscar cotação",
-        description: "Usando taxa padrão de 5 BRL",
-        variant: "destructive",
-      });
-      setExchangeRate(5);
-      setShowInBRL(true);
-    }
-  };
-
-  const formatCurrency = (value: number) => {
-    if (showInBRL) {
-      return `R$ ${(value * exchangeRate).toFixed(2)}`;
-    }
-    return `$${value.toFixed(2)}`;
-  };
-
-  const toggleCurrency = async () => {
-    if (showInBRL) {
-      setShowInBRL(false);
-    } else {
-      try {
-        const response = await fetch('https://api.exchangerate-api.com/v4/latest/USD');
-        const data = await response.json();
-        setExchangeRate(data.rates.BRL);
-        setShowInBRL(true);
-        toast({
-          title: "Cotação atualizada",
-          description: `1 USD = ${data.rates.BRL} BRL`,
-        });
-      } catch (error) {
-        toast({
-          title: "Erro ao buscar cotação",
-          description: "Usando taxa padrão de 5 BRL",
-          variant: "destructive",
-        });
-        setExchangeRate(5);
-        setShowInBRL(true);
-      }
-    }
+  const renderPDFDownload = () => {
+    return (
+      <PDFDownloadLink
+        document={
+          <CostReportPDF
+            lovableTokens={lovableTokens}
+            recommendedPlan={recommendedPlan}
+            supabaseUsers={supabaseUsers}
+            supabaseRecords={supabaseRecords}
+            supabaseStorage={supabaseStorage}
+            cursorPlan={cursorPlan}
+            profitMargin={profitMargin}
+            maintenancePercentage={maintenancePercentage}
+            developmentTotal={calculateDevelopmentTotalWithMargin()}
+            monthlyTotal={calculateMonthlyTotalWithMargin()}
+            showInBRL={showInBRL}
+            exchangeRate={exchangeRate}
+          />
+        }
+        fileName="cost-report.pdf"
+      >
+        {({ loading }) => (
+          <Button 
+            className="w-full mt-4" 
+            disabled={loading}
+          >
+            <Download className="w-4 h-4 mr-2" />
+            {loading ? "Generating PDF..." : "Export PDF"}
+          </Button>
+        )}
+      </PDFDownloadLink>
+    );
   };
 
   return (
@@ -481,7 +465,7 @@ export const PricingCalculator = () => {
                       </div>
                     </div>
                   </div>
-                  <div className="pt-4 border-t border-white/10 flex justify-end">
+                  <div className="pt-4 border-t border-white/10 flex flex-col">
                     <Button
                       onClick={toggleCurrency}
                       className="flex items-center gap-2"
@@ -494,6 +478,7 @@ export const PricingCalculator = () => {
                       />
                       {showInBRL ? "Mostrar em USD" : "Mostrar em BRL"}
                     </Button>
+                    {renderPDFDownload()}
                   </div>
                 </div>
               </div>
