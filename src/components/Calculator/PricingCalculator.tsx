@@ -45,7 +45,20 @@ export const PricingCalculator = () => {
   const [maintenancePercentage, setMaintenancePercentage] = useState(10);
   const [vpsPrice, setVpsPrice] = useState<number>(0);
   const [showInBRL, setShowInBRL] = useState(false);
-  const [exchangeRate, setExchangeRate] = useState(5); // Default exchange rate
+  const [exchangeRate, setExchangeRate] = useState(0);
+
+  // Fetch current exchange rate when component mounts
+  useEffect(() => {
+    fetch('https://api.exchangerate-api.com/v4/latest/USD')
+      .then(response => response.json())
+      .then(data => {
+        setExchangeRate(data.rates.BRL);
+      })
+      .catch(() => {
+        // Fallback to default rate if API fails
+        setExchangeRate(5);
+      });
+  }, []);
 
   const formatCurrency = (value: number): string => {
     if (showInBRL) {
@@ -84,8 +97,8 @@ export const PricingCalculator = () => {
     let totalCost = 0;
     const recordsInGB = supabaseRecords / 2700000; // Convert records to GB
     
-    // Calculate estimated bandwidth based on users and records
-    const estimatedBandwidth = Math.ceil((supabaseRecords / 1000000) + (supabaseUsers / 50000));
+    // Calculate estimated bandwidth based on database size only
+    const estimatedBandwidth = Math.ceil(recordsInGB);
 
     // Check if Pro Plan is needed
     const needsProPlan = 
@@ -98,8 +111,8 @@ export const PricingCalculator = () => {
       totalCost += 25; // Base Pro Plan cost
 
       // Add bandwidth costs if exceeding Pro plan limit
-      if (estimatedBandwidth > PRO_BANDWIDTH) {
-        const extraBandwidth = estimatedBandwidth - PRO_BANDWIDTH;
+      if (estimatedBandwidth > PRO_DATABASE) { // Only charge bandwidth after 8GB
+        const extraBandwidth = estimatedBandwidth - PRO_DATABASE;
         totalCost += extraBandwidth * EXTRA_BANDWIDTH_COST;
       }
     }
@@ -326,7 +339,7 @@ export const PricingCalculator = () => {
                   value={[supabaseUsers]}
                   onValueChange={([value]) => setSupabaseUsers(value)}
                   max={1000000}
-                  step={1000}
+                  step={100000}
                 />
               </div>
               <div>
@@ -336,7 +349,7 @@ export const PricingCalculator = () => {
                 <Slider
                   value={[supabaseRecords]}
                   onValueChange={([value]) => setSupabaseRecords(value)}
-                  max={1350000000} // 500GB worth of records (2.7M records per GB * 500)
+                  max={1350000} // 500MB worth of records (2.7M records per GB * 0.5)
                   step={500000}
                 />
               </div>
@@ -364,10 +377,10 @@ export const PricingCalculator = () => {
                     Free Plan: 5 GB bandwidth
                   </p>
                   <p className="text-xs text-gray-500">
-                    Pro Plan ($25): 25 GB bandwidth + $0.09 por GB adicional
+                    Pro Plan ({formatCurrency(25)}): 25 GB bandwidth + {formatCurrency(0.09)} por GB adicional após 8GB
                   </p>
                   <p className="text-sm font-medium">
-                    Estimativa atual: {Math.ceil((supabaseRecords / 1000000) + (supabaseUsers / 50000))} GB
+                    Estimativa atual: {Math.ceil(supabaseRecords / 2700000)} GB
                   </p>
                 </div>
               </div>
@@ -487,6 +500,11 @@ export const PricingCalculator = () => {
                       />
                       {showInBRL ? "Mostrar em USD" : "Mostrar em BRL"}
                     </Button>
+                    {showInBRL && (
+                      <p className="text-xs text-gray-400 mt-2 text-center">
+                        Cotação: USD 1 = R$ {exchangeRate.toFixed(2)}
+                      </p>
+                    )}
                   </div>
                 </div>
               </div>
