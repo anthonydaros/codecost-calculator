@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/select";
 
 const lovablePlans = [
+  { name: "Free", messages: 5, price: 0 },
   { name: "Starter", messages: 100, price: 20 },
   { name: "Launch", messages: 250, price: 50 },
   { name: "Scale 1", messages: 500, price: 100 },
