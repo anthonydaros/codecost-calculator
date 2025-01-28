@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { CalculatorSection } from "./CalculatorSection";
 import { Slider } from "@/components/ui/slider";
+import { Input } from "@/components/ui/input";
 import {
   Select,
   SelectContent,
@@ -34,22 +35,19 @@ export const PricingCalculator = () => {
   const [recommendedPlan, setRecommendedPlan] = useState(lovablePlans[0]);
   const [selectedDeployment, setSelectedDeployment] = useState<DeploymentOption>(null);
   
-  // Add missing state variables
   const [supabaseUsers, setSupabaseUsers] = useState(1000);
   const [supabaseRecords, setSupabaseRecords] = useState(100000);
   const [supabaseStorage, setSupabaseStorage] = useState(1);
   const [cursorPlan, setCursorPlan] = useState("Hobby");
   const [profitMargin, setProfitMargin] = useState(30);
   const [maintenancePercentage, setMaintenancePercentage] = useState(10);
+  const [vpsPrice, setVpsPrice] = useState<number>(0);
 
-  // Add missing calculation functions
   const calculateLovableCost = () => {
-    if (lovableTokens <= MONTHLY_BONUS_MESSAGES) return 0;
     return recommendedPlan.price;
   };
 
   const calculateSupabaseCost = () => {
-    // Basic calculation for Supabase cost
     const usersCost = Math.floor(supabaseUsers / 50000) * 25;
     const storageCost = supabaseStorage * 0.021;
     const databaseCost = Math.floor(supabaseRecords / 8000000) * 25;
@@ -74,7 +72,8 @@ export const PricingCalculator = () => {
   const calculateMonthlyCosts = () => {
     const supabaseMonthlyCost = calculateSupabaseCost();
     const maintenanceCost = (calculateDevelopmentCost() * maintenancePercentage) / 100;
-    return supabaseMonthlyCost + maintenanceCost;
+    const deploymentCost = selectedDeployment === "vps" ? vpsPrice : 0;
+    return supabaseMonthlyCost + maintenanceCost + deploymentCost;
   };
 
   const totalCost = () => {
@@ -101,40 +100,50 @@ export const PricingCalculator = () => {
       case "netlify":
         return (
           <div className="mt-4 p-4 bg-white/5 rounded-lg space-y-2">
-            <h4 className="font-semibold">Netlify Deployment</h4>
+            <h4 className="font-semibold">Netlify Free</h4>
             <p className="text-sm text-gray-400">
-              - Automatic deployments from Git<br />
-              - Free SSL certificates<br />
-              - Global CDN<br />
-              - Continuous deployment<br />
-              - Free tier available
+              Preço: Gratuito<br />
+              Banda: 100 GB/mês<br />
+              Builds: 300 min/mês<br />
+              Sites: Até 500<br />
+              Serverless: 125k invocações/mês<br />
+              Edge Functions: 1M invocações/mês<br />
+              Colaboração: 1 membro (Git ilimitado)<br />
+              Extras: Pré-visualizações, reversões instantâneas
             </p>
           </div>
         );
       case "vercel":
         return (
           <div className="mt-4 p-4 bg-white/5 rounded-lg space-y-2">
-            <h4 className="font-semibold">Vercel Deployment</h4>
+            <h4 className="font-semibold">Vercel Hobby</h4>
             <p className="text-sm text-gray-400">
-              - Zero configuration<br />
-              - Automatic HTTPS<br />
-              - Edge Network<br />
-              - Preview deployments<br />
-              - Free tier available
+              Preço: Gratuito<br />
+              Banda: 100 GB/mês<br />
+              Builds: 6.000 min/mês<br />
+              Projetos: Até 200<br />
+              Serverless: 100k invocações/mês<br />
+              Edge Functions: 1M invocações/mês<br />
+              Colaboração: Sem equipe<br />
+              Extras: CI/CD, insights, mitigação DDoS, firewall
             </p>
           </div>
         );
       case "vps":
         return (
-          <div className="mt-4 p-4 bg-white/5 rounded-lg space-y-2">
-            <h4 className="font-semibold">VPS Deployment</h4>
-            <p className="text-sm text-gray-400">
-              - Full server control<br />
-              - Custom configuration<br />
-              - Scalable resources<br />
-              - Multiple providers available<br />
-              - Starting from $5/month
-            </p>
+          <div className="mt-4 p-4 bg-white/5 rounded-lg space-y-3">
+            <h4 className="font-semibold">VPS Customizada</h4>
+            <div className="space-y-2">
+              <label className="text-sm text-gray-400">Custo mensal da VPS ($)</label>
+              <Input
+                type="number"
+                min="0"
+                value={vpsPrice}
+                onChange={(e) => setVpsPrice(Number(e.target.value))}
+                className="w-full"
+                placeholder="Digite o valor mensal da VPS"
+              />
+            </div>
           </div>
         );
       default:
