@@ -273,8 +273,8 @@ export const PricingCalculator = () => {
       Estime o custo do desenvolvimento do seu app no-code com Lovable.dev, Supabase e Cursor, ajustando os valores conforme suas necessidades.
       </p>
 
-      <div className="grid grid-cols-4 gap-6">
-        <div className="col-span-3 space-y-6">
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+        <div className="md:col-span-3 space-y-6">
           <CalculatorSection 
             title="Lovable.dev" 
             color="#646cff"
@@ -408,8 +408,8 @@ export const PricingCalculator = () => {
                 <Slider
                   value={[profitMargin]}
                   onValueChange={([value]) => setProfitMargin(value)}
-                  max={100}
-                  step={1}
+                  max={500}
+                  step={10}
                 />
               </div>
               <div>
@@ -495,6 +495,9 @@ export const PricingCalculator = () => {
           </CalculatorSection>
         </div>
       </div>
+      <footer className="mt-12 text-center text-gray-400">
+        Desenvolvido por Anthony Max
+      </footer>
     </div>
   );
 };
