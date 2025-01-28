@@ -247,8 +247,10 @@ export const PricingCalculator = () => {
   };
 
   const calculateMonthlyTotalWithMargin = () => {
-    const monthlyCosts = calculateMonthlyCosts();
-    return monthlyCosts * (1 + profitMargin / 100);
+    const supabaseCost = calculateSupabaseCost();
+    const maintenanceCost = (calculateDevelopmentCost() * maintenancePercentage) / 100;
+    const deploymentCost = selectedDeployment === "vps" ? vpsPrice : 0;
+    return supabaseCost + maintenanceCost + deploymentCost;
   };
 
   return (
@@ -480,7 +482,7 @@ export const PricingCalculator = () => {
                         </div>
                       )}
                       <div className="pt-2 border-t border-white/10">
-                        <p className="text-sm text-gray-400">Total (com margem)</p>
+                        <p className="text-sm text-gray-400">Total</p>
                         <p className="text-lg font-bold neon-glow">
                           {formatCurrency(calculateMonthlyTotalWithMargin())}
                         </p>
