@@ -1,4 +1,3 @@
-<lov-code>
 import { useState, useEffect } from "react";
 import { CalculatorSection } from "./CalculatorSection";
 import { Slider } from "@/components/ui/slider";
@@ -26,7 +25,7 @@ const lovablePlans = [
   { name: "Scale 4", messages: 2000, price: 384 },
   { name: "Scale 5", messages: 3000, price: 564 },
   { name: "Scale 6", messages: 4000, price: 736 },
-  { name: "Scale 7", messages: 5000, price: 900 },
+  { name: "Scale 7", messages: 5000, price: 900 }
 ];
 
 const DAILY_BONUS_MESSAGES = 5;
@@ -49,7 +48,7 @@ export const PricingCalculator = () => {
   const [maintenancePercentage, setMaintenancePercentage] = useState(10);
   const [vpsPrice, setVpsPrice] = useState<number>(0);
   const [showInBRL, setShowInBRL] = useState(false);
-  const [exchangeRate, setExchangeRate] = useState(5); // Default exchange rate
+  const [exchangeRate, setExchangeRate] = useState(5);
 
   const formatCurrency = (value: number): string => {
     if (showInBRL) {
@@ -68,12 +67,12 @@ export const PricingCalculator = () => {
 
   const calculateSupabaseCost = () => {
     const FREE_USERS = 50000;
-    const FREE_STORAGE = 1; // 1GB
-    const FREE_DATABASE = 0.5; // 500MB
+    const FREE_STORAGE = 1;
+    const FREE_DATABASE = 0.5;
 
     const PRO_USERS = 100000;
-    const PRO_STORAGE = 100; // 100GB
-    const PRO_DATABASE = 8; // 8GB
+    const PRO_STORAGE = 100;
+    const PRO_DATABASE = 8;
 
     const EXTRA_USER_COST = 0.00325;
     const EXTRA_STORAGE_COST = 0.021;
@@ -87,7 +86,7 @@ export const PricingCalculator = () => {
         const extraUsers = supabaseUsers - PRO_USERS;
         totalCost += 25 + (extraUsers * EXTRA_USER_COST);
       } else {
-        totalCost += 25; // Pro plan cost
+        totalCost += 25;
       }
     }
 
@@ -97,17 +96,17 @@ export const PricingCalculator = () => {
         const extraStorage = supabaseStorage - PRO_STORAGE;
         totalCost += extraStorage * EXTRA_STORAGE_COST;
       }
-      totalCost += 25; // Pro plan cost for storage
+      totalCost += 25;
     }
 
     // Database records calculation (convert to GB)
-    const recordsInGB = supabaseRecords / 2700000; // Approximate conversion
+    const recordsInGB = supabaseRecords / 2700000;
     if (recordsInGB > FREE_DATABASE) {
       if (recordsInGB > PRO_DATABASE) {
         const extraDB = recordsInGB - PRO_DATABASE;
         totalCost += extraDB * EXTRA_DATABASE_COST;
       }
-      totalCost += 25; // Pro plan cost for database
+      totalCost += 25;
     }
 
     return totalCost;
@@ -259,4 +258,107 @@ export const PricingCalculator = () => {
 
   return (
     <div className="max-w-7xl mx-auto space-y-6 p-6">
-      <div className="flex justify-center items-center gap
+      <CalculatorSection>
+        <h1 className="text-2xl font-bold">Calculadora de Preços</h1>
+        <div className="flex flex-col space-y-4">
+          <div>
+            <label className="text-sm text-gray-400">Tokens Lovable</label>
+            <Input
+              type="number"
+              value={lovableTokens}
+              onChange={(e) => setLovableTokens(Number(e.target.value))}
+              className="w-full"
+              placeholder="Digite o número de tokens"
+            />
+          </div>
+          <div>
+            <label className="text-sm text-gray-400">Margem de Lucro (%)</label>
+            <Input
+              type="number"
+              value={profitMargin}
+              onChange={(e) => setProfitMargin(Number(e.target.value))}
+              className="w-full"
+              placeholder="Digite a margem de lucro"
+            />
+          </div>
+          <div>
+            <label className="text-sm text-gray-400">Porcentagem de Manutenção (%)</label>
+            <Input
+              type="number"
+              value={maintenancePercentage}
+              onChange={(e) => setMaintenancePercentage(Number(e.target.value))}
+              className="w-full"
+              placeholder="Digite a porcentagem de manutenção"
+            />
+          </div>
+          <div>
+            <label className="text-sm text-gray-400">Usuários Supabase</label>
+            <Input
+              type="number"
+              value={supabaseUsers}
+              onChange={(e) => setSupabaseUsers(Number(e.target.value))}
+              className="w-full"
+              placeholder="Digite o número de usuários"
+            />
+          </div>
+          <div>
+            <label className="text-sm text-gray-400">Registros Supabase</label>
+            <Input
+              type="number"
+              value={supabaseRecords}
+              onChange={(e) => setSupabaseRecords(Number(e.target.value))}
+              className="w-full"
+              placeholder="Digite o número de registros"
+            />
+          </div>
+          <div>
+            <label className="text-sm text-gray-400">Armazenamento Supabase (GB)</label>
+            <Input
+              type="number"
+              value={supabaseStorage}
+              onChange={(e) => setSupabaseStorage(Number(e.target.value))}
+              className="w-full"
+              placeholder="Digite o armazenamento em GB"
+            />
+          </div>
+          <div>
+            <label className="text-sm text-gray-400">Plano do Cursor</label>
+            <Select onValueChange={setCursorPlan}>
+              <SelectTrigger>
+                <SelectValue placeholder="Selecione um plano" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="Hobby">Hobby</SelectItem>
+                <SelectItem value="Pro">Pro</SelectItem>
+                <SelectItem value="Business">Business</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+          <div>
+            <label className="text-sm text-gray-400">Opção de Implantação</label>
+            <Select onValueChange={setSelectedDeployment}>
+              <SelectTrigger>
+                <SelectValue placeholder="Selecione uma opção" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="netlify">Netlify</SelectItem>
+                <SelectItem value="vercel">Vercel</SelectItem>
+                <SelectItem value="vps">VPS</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+          <div>
+            <Button onClick={toggleCurrency}>
+              {showInBRL ? "Mostrar em USD" : "Mostrar em BRL"}
+            </Button>
+          </div>
+          <div>
+            <h2 className="text-lg font-semibold">Custo Total: {formatCurrency(totalCost())}</h2>
+          </div>
+          {getDeploymentContent()}
+          {renderPDFDownload()}
+        </div>
+      </CalculatorSection>
+    </div>
+  );
+};
