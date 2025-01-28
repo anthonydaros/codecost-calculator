@@ -78,44 +78,31 @@ export const PricingCalculator = () => {
     let totalCost = 0;
     let isProPlanAdded = false;
 
-    // Users calculation
-    if (supabaseUsers > FREE_USERS) {
-      if (!isProPlanAdded) {
-        totalCost += 25;
-        isProPlanAdded = true;
-      }
-      
-      if (supabaseUsers > PRO_USERS) {
-        const extraUsers = supabaseUsers - PRO_USERS;
-        totalCost += extraUsers * EXTRA_USER_COST;
-      }
-    }
-
-    // Storage calculation
-    if (supabaseStorage > FREE_STORAGE) {
-      if (!isProPlanAdded) {
-        totalCost += 25;
-        isProPlanAdded = true;
-      }
-      
-      if (supabaseStorage > PRO_STORAGE) {
-        const extraStorage = supabaseStorage - PRO_STORAGE;
-        totalCost += extraStorage * EXTRA_STORAGE_COST;
-      }
-    }
-
-    // Database records calculation
+    // Check if any limit is exceeded to add Pro plan cost once
     const recordsInGB = supabaseRecords / 2700000;
-    if (recordsInGB > FREE_DATABASE) {
-      if (!isProPlanAdded) {
-        totalCost += 25;
-        isProPlanAdded = true;
-      }
-      
-      if (recordsInGB > PRO_DATABASE) {
-        const extraDB = recordsInGB - PRO_DATABASE;
-        totalCost += extraDB * EXTRA_DATABASE_COST;
-      }
+    if (supabaseUsers > FREE_USERS || 
+        supabaseStorage > FREE_STORAGE || 
+        recordsInGB > FREE_DATABASE) {
+      totalCost += 25; // Add Pro plan cost once
+      isProPlanAdded = true;
+    }
+
+    // Calculate extra costs for users
+    if (supabaseUsers > PRO_USERS) {
+      const extraUsers = supabaseUsers - PRO_USERS;
+      totalCost += extraUsers * EXTRA_USER_COST;
+    }
+
+    // Calculate extra costs for storage
+    if (supabaseStorage > PRO_STORAGE) {
+      const extraStorage = supabaseStorage - PRO_STORAGE;
+      totalCost += extraStorage * EXTRA_STORAGE_COST;
+    }
+
+    // Calculate extra costs for database records
+    if (recordsInGB > PRO_DATABASE) {
+      const extraDB = recordsInGB - PRO_DATABASE;
+      totalCost += extraDB * EXTRA_DATABASE_COST;
     }
 
     return totalCost;
