@@ -429,7 +429,7 @@ export const PricingCalculator = () => {
               </div>
               <div>
                 <label className="block text-sm mb-2">
-                  Manutenção Mensal: {maintenancePercentage}%
+                  Manutenção Mensal: {maintenancePercentage}% (Lucro)
                 </label>
                 <Slider
                   value={[maintenancePercentage]}
