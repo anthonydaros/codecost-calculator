@@ -151,7 +151,7 @@ export const PricingCalculator = () => {
         title="Cursor" 
         color="#FF4D4D"
         icon="/cursor logo.png"
-        description="Editor de código com IA para fazer ajustes e refinamentos. Ideal para pequenas alterações como mudança de cores, textos ou estilos, sendo mais econômico que usar o Lovable para essas tarefas simples."
+        description="Editor de código com IA para fazer ajustes e refinamentos no frontend e backend. Ideal para pequenas alterações como mudança de cores e textos, sendo mais econômico que usar o Lovable para essas tarefas. Também é eficiente para desenvolvimento backend por executar códigos mais complexos. Disponível gratuitamente com 2000 completions e 50 requisições premium lentas, ou em planos pagos com recursos adicionais."
       >
         <div className="space-y-4">
           <div>
