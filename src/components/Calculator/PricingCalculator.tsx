@@ -8,6 +8,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Button } from "@/components/ui/button";
 
 const lovablePlans = [
   { name: "Free", messages: 5, price: 0 },
@@ -26,15 +27,17 @@ const DAILY_BONUS_MESSAGES = 5;
 const DAYS_IN_MONTH = 30;
 const MONTHLY_BONUS_MESSAGES = DAILY_BONUS_MESSAGES * DAYS_IN_MONTH;
 
+type DeploymentOption = "netlify" | "vercel" | "vps" | null;
+
 export const PricingCalculator = () => {
   const [lovableTokens, setLovableTokens] = useState(100);
   const [recommendedPlan, setRecommendedPlan] = useState(lovablePlans[0]);
-  const [supabaseUsers, setSupabaseUsers] = useState(100);
-  const [supabaseRecords, setSupabaseRecords] = useState(1000000);
-  const [supabaseStorage, setSupabaseStorage] = useState(1);
-  const [cursorPlan, setCursorPlan] = useState("Hobby");
-  const [profitMargin, setProfitMargin] = useState(30);
-  const [maintenancePercentage, setMaintenancePercentage] = useState(10); // 10% default
+  const [selectedDeployment, setSelectedDeployment] = useState<DeploymentOption>(null);
+  
+  const calculateLovableCost = () => {
+    if (lovableTokens <= MONTHLY_BONUS_MESSAGES) return 0;
+    return recommendedPlan.price;
+  };
 
   useEffect(() => {
     const appropriatePlan = lovablePlans.reduce((prev, curr) => {
@@ -48,50 +51,50 @@ export const PricingCalculator = () => {
     setRecommendedPlan(appropriatePlan);
   }, [lovableTokens]);
 
-  const calculateLovableCost = () => {
-    if (lovableTokens <= MONTHLY_BONUS_MESSAGES) return 0;
-    return recommendedPlan.price;
-  };
-
-  const calculateSupabaseCost = () => {
-    // Plano gratuito: até 50.000 usuários, 500MB storage, 500.000 registros
-    const userCost = Math.max(0, supabaseUsers - 50000) * 0.00325;
-    const storageCost = Math.max(0, supabaseStorage - 0.5) * 0.021;
-    const recordsCost = Math.max(0, supabaseRecords - 500000) * 0.000001;
-    
-    // Se todos os valores estiverem dentro do limite gratuito, retorna 0
-    if (supabaseUsers <= 50000 && supabaseStorage <= 0.5 && supabaseRecords <= 500000) {
-      return 0;
+  const getDeploymentContent = () => {
+    switch (selectedDeployment) {
+      case "netlify":
+        return (
+          <div className="mt-4 p-4 bg-white/5 rounded-lg space-y-2">
+            <h4 className="font-semibold">Netlify Deployment</h4>
+            <p className="text-sm text-gray-400">
+              - Automatic deployments from Git<br />
+              - Free SSL certificates<br />
+              - Global CDN<br />
+              - Continuous deployment<br />
+              - Free tier available
+            </p>
+          </div>
+        );
+      case "vercel":
+        return (
+          <div className="mt-4 p-4 bg-white/5 rounded-lg space-y-2">
+            <h4 className="font-semibold">Vercel Deployment</h4>
+            <p className="text-sm text-gray-400">
+              - Zero configuration<br />
+              - Automatic HTTPS<br />
+              - Edge Network<br />
+              - Preview deployments<br />
+              - Free tier available
+            </p>
+          </div>
+        );
+      case "vps":
+        return (
+          <div className="mt-4 p-4 bg-white/5 rounded-lg space-y-2">
+            <h4 className="font-semibold">VPS Deployment</h4>
+            <p className="text-sm text-gray-400">
+              - Full server control<br />
+              - Custom configuration<br />
+              - Scalable resources<br />
+              - Multiple providers available<br />
+              - Starting from $5/month
+            </p>
+          </div>
+        );
+      default:
+        return null;
     }
-    
-    // Caso contrário, calcula o custo com o plano Pro
-    const basePrice = 25; // Preço base mensal do plano Pro
-    return (basePrice + userCost + storageCost + recordsCost) * 12; // Custo anual
-  };
-
-  const calculateCursorCost = () => {
-    const planPrices = {
-      Hobby: 0,
-      Pro: 20,
-      Business: 40,
-    };
-    return planPrices[cursorPlan as keyof typeof planPrices];
-  };
-
-  const calculateDevelopmentCost = () => {
-    return calculateLovableCost() + calculateCursorCost();
-  };
-
-  const calculateMonthlyCosts = () => {
-    const supabaseMonthlyCost = calculateSupabaseCost() / 12;
-    const maintenanceCost = (calculateDevelopmentCost() * maintenancePercentage) / 100;
-    return supabaseMonthlyCost + maintenanceCost;
-  };
-
-  const totalCost = () => {
-    const developmentCost = calculateDevelopmentCost();
-    const monthlyTotal = calculateMonthlyCosts();
-    return (developmentCost + (monthlyTotal * 12)) * (1 + profitMargin / 100);
   };
 
   return (
@@ -135,11 +138,36 @@ export const PricingCalculator = () => {
                 <p className="text-sm text-gray-300">Plano Recomendado:</p>
                 <p className="text-lg font-semibold">{recommendedPlan.name}</p>
                 <p className="text-sm text-gray-400">
-                  Limite: {recommendedPlan.messages.toLocaleString()} mensagens + {MONTHLY_BONUS_MESSAGES} mensagens bônus mensal
+                  Limite: {recommendedPlan.messages.toLocaleString()} mensagens
+                  {recommendedPlan.price > 0 && ` + ${MONTHLY_BONUS_MESSAGES} mensagens bônus mensal`}
                 </p>
                 <p className="text-sm text-gray-400">
                   Preço: ${recommendedPlan.price}
                 </p>
+              </div>
+              <div className="space-y-2">
+                <p className="text-sm font-semibold">Opções de Deploy:</p>
+                <div className="flex gap-2">
+                  <Button
+                    variant={selectedDeployment === "netlify" ? "default" : "outline"}
+                    onClick={() => setSelectedDeployment(selectedDeployment === "netlify" ? null : "netlify")}
+                  >
+                    Netlify
+                  </Button>
+                  <Button
+                    variant={selectedDeployment === "vercel" ? "default" : "outline"}
+                    onClick={() => setSelectedDeployment(selectedDeployment === "vercel" ? null : "vercel")}
+                  >
+                    Vercel
+                  </Button>
+                  <Button
+                    variant={selectedDeployment === "vps" ? "default" : "outline"}
+                    onClick={() => setSelectedDeployment(selectedDeployment === "vps" ? null : "vps")}
+                  >
+                    VPS
+                  </Button>
+                </div>
+                {getDeploymentContent()}
               </div>
             </div>
           </CalculatorSection>
