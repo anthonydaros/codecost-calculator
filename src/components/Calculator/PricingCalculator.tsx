@@ -79,14 +79,17 @@ export const PricingCalculator = () => {
     const EXTRA_DATABASE_COST = 0.125;
 
     let totalCost = 0;
+    let planCost = 0;
 
     // Users calculation
     if (supabaseUsers > FREE_USERS) {
       if (supabaseUsers > PRO_USERS) {
         const extraUsers = supabaseUsers - PRO_USERS;
-        totalCost += 25 + (extraUsers * EXTRA_USER_COST);
+        planCost = 25;
+        totalCost += planCost + (extraUsers * EXTRA_USER_COST);
       } else {
-        totalCost += 25; // Pro plan cost
+        planCost = 25;
+        totalCost += planCost;
       }
     }
 
@@ -94,9 +97,11 @@ export const PricingCalculator = () => {
     if (supabaseStorage > FREE_STORAGE) {
       if (supabaseStorage > PRO_STORAGE) {
         const extraStorage = supabaseStorage - PRO_STORAGE;
-        totalCost += 25 + (extraStorage * EXTRA_STORAGE_COST);
-      } else {
-        totalCost += 25; // Pro plan cost
+        if (planCost === 0) planCost = 25;
+        totalCost += (extraStorage * EXTRA_STORAGE_COST);
+      } else if (planCost === 0) {
+        planCost = 25;
+        totalCost += planCost;
       }
     }
 
@@ -105,9 +110,11 @@ export const PricingCalculator = () => {
     if (recordsInGB > FREE_DATABASE) {
       if (recordsInGB > PRO_DATABASE) {
         const extraDB = recordsInGB - PRO_DATABASE;
-        totalCost += 25 + (extraDB * EXTRA_DATABASE_COST);
-      } else {
-        totalCost += 25; // Pro plan cost
+        if (planCost === 0) planCost = 25;
+        totalCost += (extraDB * EXTRA_DATABASE_COST);
+      } else if (planCost === 0) {
+        planCost = 25;
+        totalCost += planCost;
       }
     }
 
@@ -261,9 +268,9 @@ export const PricingCalculator = () => {
   return (
     <div className="max-w-7xl mx-auto space-y-6 p-6">
       <div className="flex justify-center items-center gap-8 mb-12">
-        <img src="/lovable icon.svg" alt="Lovable" className="w-16 h-16" />
+        <img src="/lovable-icon.svg" alt="Lovable" className="w-16 h-16" />
         <img src="/supabase-logo-icon.svg" alt="Supabase" className="w-16 h-16" />
-        <img src="/cursor logo.png" alt="Cursor" className="w-16 h-16" />
+        <img src="/cursor-logo.png" alt="Cursor" className="w-16 h-16" />
       </div>
 
       <h1 className="text-3xl font-bold text-center mb-4 neon-glow">
@@ -278,7 +285,7 @@ export const PricingCalculator = () => {
           <CalculatorSection 
             title="Lovable.dev" 
             color="#646cff"
-            icon="/lovable icon.svg"
+            icon="/lovable-icon.svg"
             description="Plataforma principal para desenvolvimento do aplicativo. Permite criar interfaces completas e funcionais usando IA. O custo é baseado no número de mensagens necessárias para desenvolver seu app - quanto mais complexo, mais mensagens serão necessárias."
           >
             <div className="space-y-4">
@@ -383,7 +390,7 @@ export const PricingCalculator = () => {
           <CalculatorSection 
             title="Cursor" 
             color="#FF4D4D"
-            icon="/cursor logo.png"
+            icon="/cursor-logo.png"
             description="Editor de código com IA para fazer ajustes e refinamentos no frontend e backend. Ideal para pequenas alterações como mudança de cores e textos, sendo mais econômico que usar o Lovable para essas tarefas. Também é eficiente para desenvolvimento backend por executar códigos mais complexos. Disponível gratuitamente com 2000 completions e 50 requisições premium lentas, ou em planos pagos com recursos adicionais."
           >
             <div className="space-y-4">
