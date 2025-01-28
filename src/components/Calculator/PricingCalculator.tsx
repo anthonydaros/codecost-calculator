@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { CalculatorSection } from "./CalculatorSection";
 import { Slider } from "@/components/ui/slider";
 import {
@@ -10,24 +10,41 @@ import {
 } from "@/components/ui/select";
 
 const lovablePlans = [
-  { name: "Starter", price: 0 },
-  { name: "Launch", price: 49 },
-  { name: "Scale 1", price: 99 },
-  { name: "Teams", price: 199 },
+  { name: "Starter", messages: 100, price: 20 },
+  { name: "Launch", messages: 250, price: 50 },
+  { name: "Scale 1", messages: 500, price: 100 },
+  { name: "Scale 2", messages: 1000, price: 200 },
+  { name: "Scale 3", messages: 1500, price: 294 },
+  { name: "Scale 4", messages: 2000, price: 384 },
+  { name: "Scale 5", messages: 3000, price: 564 },
+  { name: "Scale 6", messages: 4000, price: 736 },
+  { name: "Scale 7", messages: 5000, price: 900 },
 ];
 
 export const PricingCalculator = () => {
-  const [lovableTokens, setLovableTokens] = useState(1000);
-  const [lovablePlan, setLovablePlan] = useState("Starter");
+  const [lovableTokens, setLovableTokens] = useState(100);
+  const [recommendedPlan, setRecommendedPlan] = useState(lovablePlans[0]);
   const [supabaseUsers, setSupabaseUsers] = useState(100);
   const [supabaseStorage, setSupabaseStorage] = useState(1);
   const [cursorTokens, setCursorTokens] = useState(1000);
   const [cursorPlan, setCursorPlan] = useState("Hobby");
   const [profitMargin, setProfitMargin] = useState(30);
 
+  useEffect(() => {
+    // Find the most cost-effective plan for the selected number of tokens
+    const appropriatePlan = lovablePlans.reduce((prev, curr) => {
+      if (lovableTokens <= curr.messages && 
+          (prev.messages > curr.messages || prev.messages < lovableTokens)) {
+        return curr;
+      }
+      return prev;
+    }, lovablePlans[0]);
+    
+    setRecommendedPlan(appropriatePlan);
+  }, [lovableTokens]);
+
   const calculateLovableCost = () => {
-    const plan = lovablePlans.find(p => p.name === lovablePlan);
-    return plan?.price || 0;
+    return recommendedPlan.price;
   };
 
   const calculateSupabaseCost = () => {
@@ -54,7 +71,7 @@ export const PricingCalculator = () => {
   return (
     <div className="max-w-4xl mx-auto space-y-6 p-6">
       <h1 className="text-3xl font-bold text-center mb-8 neon-glow">
-        No-Code App Cost Calculator
+        Calculadora de Custo para Apps No-Code
       </h1>
 
       <CalculatorSection 
@@ -64,30 +81,25 @@ export const PricingCalculator = () => {
       >
         <div className="space-y-4">
           <div>
-            <label className="block text-sm mb-2">Plan</label>
-            <Select value={lovablePlan} onValueChange={setLovablePlan}>
-              <SelectTrigger>
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                {lovablePlans.map(plan => (
-                  <SelectItem key={plan.name} value={plan.name}>
-                    {plan.name} (${plan.price}/mo)
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-          <div>
             <label className="block text-sm mb-2">
-              Messages per month: {lovableTokens.toLocaleString()}
+              Mensagens necessárias: {lovableTokens.toLocaleString()}
             </label>
             <Slider
               value={[lovableTokens]}
               onValueChange={([value]) => setLovableTokens(value)}
-              max={100000}
-              step={1000}
+              max={5000}
+              step={50}
             />
+          </div>
+          <div className="bg-white/5 p-4 rounded-lg">
+            <p className="text-sm text-gray-300">Plano Recomendado:</p>
+            <p className="text-lg font-semibold">{recommendedPlan.name}</p>
+            <p className="text-sm text-gray-400">
+              Limite: {recommendedPlan.messages.toLocaleString()} mensagens
+            </p>
+            <p className="text-sm text-gray-400">
+              Preço: ${recommendedPlan.price}
+            </p>
           </div>
         </div>
       </CalculatorSection>
@@ -100,7 +112,7 @@ export const PricingCalculator = () => {
         <div className="space-y-4">
           <div>
             <label className="block text-sm mb-2">
-              Monthly Active Users: {supabaseUsers.toLocaleString()}
+              Usuários Ativos Mensais: {supabaseUsers.toLocaleString()}
             </label>
             <Slider
               value={[supabaseUsers]}
@@ -111,7 +123,7 @@ export const PricingCalculator = () => {
           </div>
           <div>
             <label className="block text-sm mb-2">
-              Storage (GB): {supabaseStorage}
+              Armazenamento (GB): {supabaseStorage}
             </label>
             <Slider
               value={[supabaseStorage]}
@@ -130,21 +142,21 @@ export const PricingCalculator = () => {
       >
         <div className="space-y-4">
           <div>
-            <label className="block text-sm mb-2">Plan</label>
+            <label className="block text-sm mb-2">Plano</label>
             <Select value={cursorPlan} onValueChange={setCursorPlan}>
               <SelectTrigger>
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="Hobby">Hobby ($0/mo)</SelectItem>
-                <SelectItem value="Pro">Pro ($20/mo)</SelectItem>
-                <SelectItem value="Business">Business ($40/mo)</SelectItem>
+                <SelectItem value="Hobby">Hobby (Grátis)</SelectItem>
+                <SelectItem value="Pro">Pro ($20/mês)</SelectItem>
+                <SelectItem value="Business">Business ($40/mês)</SelectItem>
               </SelectContent>
             </Select>
           </div>
           <div>
             <label className="block text-sm mb-2">
-              Tokens per month: {cursorTokens.toLocaleString()}
+              Tokens por mês: {cursorTokens.toLocaleString()}
             </label>
             <Slider
               value={[cursorTokens]}
@@ -156,11 +168,11 @@ export const PricingCalculator = () => {
         </div>
       </CalculatorSection>
 
-      <CalculatorSection title="Results" className="mt-8">
+      <CalculatorSection title="Resultados" className="mt-8">
         <div className="space-y-4">
           <div>
             <label className="block text-sm mb-2">
-              Profit Margin: {profitMargin}%
+              Margem de Lucro: {profitMargin}%
             </label>
             <Slider
               value={[profitMargin]}
@@ -173,20 +185,20 @@ export const PricingCalculator = () => {
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <p className="text-sm text-gray-400">Lovable.dev</p>
-                <p className="text-lg">${calculateLovableCost()}/mo</p>
+                <p className="text-lg">${calculateLovableCost()}</p>
               </div>
               <div>
                 <p className="text-sm text-gray-400">Supabase</p>
-                <p className="text-lg">${calculateSupabaseCost().toFixed(2)}/mo</p>
+                <p className="text-lg">${calculateSupabaseCost().toFixed(2)}</p>
               </div>
               <div>
                 <p className="text-sm text-gray-400">Cursor</p>
-                <p className="text-lg">${calculateCursorCost()}/mo</p>
+                <p className="text-lg">${calculateCursorCost()}</p>
               </div>
               <div>
-                <p className="text-sm text-gray-400">Total (with margin)</p>
+                <p className="text-sm text-gray-400">Total (com margem)</p>
                 <p className="text-2xl font-bold neon-glow">
-                  ${totalCost().toFixed(2)}/mo
+                  ${totalCost().toFixed(2)}
                 </p>
               </div>
             </div>
