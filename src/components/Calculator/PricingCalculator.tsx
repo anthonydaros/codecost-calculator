@@ -252,7 +252,7 @@ export const PricingCalculator = () => {
           disabled={loading}
         >
           <Download className="w-4 h-4 mr-2" />
-          {loading ? "Generating PDF..." : "Export PDF"}
+          {loading ? "Gerando PDF..." : "Exportar PDF"}
         </Button>
       )}
     </PDFDownloadLink>
