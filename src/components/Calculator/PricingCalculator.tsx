@@ -29,6 +29,7 @@ export const PricingCalculator = () => {
   const [supabaseStorage, setSupabaseStorage] = useState(1);
   const [cursorPlan, setCursorPlan] = useState("Hobby");
   const [profitMargin, setProfitMargin] = useState(30);
+  const [maintenancePercentage, setMaintenancePercentage] = useState(10); // 10% default
 
   useEffect(() => {
     const appropriatePlan = lovablePlans.reduce((prev, curr) => {
@@ -63,9 +64,20 @@ export const PricingCalculator = () => {
     return planPrices[cursorPlan as keyof typeof planPrices];
   };
 
+  const calculateDevelopmentCost = () => {
+    return calculateLovableCost() + calculateCursorCost();
+  };
+
+  const calculateMonthlyCosts = () => {
+    const supabaseMonthlyCost = calculateSupabaseCost() / 12;
+    const maintenanceCost = (calculateDevelopmentCost() * maintenancePercentage) / 100;
+    return supabaseMonthlyCost + maintenanceCost;
+  };
+
   const totalCost = () => {
-    const base = calculateLovableCost() + calculateSupabaseCost() + calculateCursorCost();
-    return base * (1 + profitMargin / 100);
+    const developmentCost = calculateDevelopmentCost();
+    const monthlyTotal = calculateMonthlyCosts();
+    return (developmentCost + (monthlyTotal * 12)) * (1 + profitMargin / 100);
   };
 
   return (
@@ -199,21 +211,52 @@ export const PricingCalculator = () => {
                   step={1}
                 />
               </div>
+              <div>
+                <label className="block text-sm mb-2">
+                  Manutenção Mensal: {maintenancePercentage}% do custo de desenvolvimento
+                </label>
+                <Slider
+                  value={[maintenancePercentage]}
+                  onValueChange={([value]) => setMaintenancePercentage(value)}
+                  max={50}
+                  step={1}
+                />
+              </div>
               <div className="pt-4 border-t border-white/10">
                 <div className="space-y-4">
                   <div>
-                    <p className="text-sm text-gray-400">Lovable.dev</p>
-                    <p className="text-lg">${calculateLovableCost()}</p>
+                    <p className="text-lg font-semibold border-b border-white/10 pb-2">Custos de Desenvolvimento (único)</p>
+                    <div className="space-y-2 mt-2">
+                      <div>
+                        <p className="text-sm text-gray-400">Lovable.dev</p>
+                        <p className="text-lg">${calculateLovableCost()}</p>
+                      </div>
+                      <div>
+                        <p className="text-sm text-gray-400">Cursor</p>
+                        <p className="text-lg">${calculateCursorCost()}</p>
+                      </div>
+                    </div>
                   </div>
                   <div>
-                    <p className="text-sm text-gray-400">Supabase (Mensal)</p>
-                    <p className="text-lg">${(calculateSupabaseCost() / 12).toFixed(2)}</p>
+                    <p className="text-lg font-semibold border-b border-white/10 pb-2">Custos Mensais</p>
+                    <div className="space-y-2 mt-2">
+                      <div>
+                        <p className="text-sm text-gray-400">Supabase</p>
+                        <p className="text-lg">${(calculateSupabaseCost() / 12).toFixed(2)}</p>
+                      </div>
+                      {maintenancePercentage > 0 && (
+                        <div>
+                          <p className="text-sm text-gray-400">Manutenção Sugerida</p>
+                          <p className="text-lg">${((calculateDevelopmentCost() * maintenancePercentage) / 100).toFixed(2)}</p>
+                        </div>
+                      )}
+                      <div className="pt-2 border-t border-white/10">
+                        <p className="text-sm text-gray-400">Total Mensal</p>
+                        <p className="text-lg font-bold">${calculateMonthlyCosts().toFixed(2)}</p>
+                      </div>
+                    </div>
                   </div>
-                  <div>
-                    <p className="text-sm text-gray-400">Cursor</p>
-                    <p className="text-lg">${calculateCursorCost()}</p>
-                  </div>
-                  <div>
+                  <div className="pt-4 border-t border-white/10">
                     <p className="text-sm text-gray-400">Total (com margem)</p>
                     <p className="text-2xl font-bold neon-glow">
                       ${totalCost().toFixed(2)}
