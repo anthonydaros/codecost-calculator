@@ -31,7 +31,6 @@ export const PricingCalculator = () => {
   const [profitMargin, setProfitMargin] = useState(30);
 
   useEffect(() => {
-    // Find the most cost-effective plan for the selected number of tokens
     const appropriatePlan = lovablePlans.reduce((prev, curr) => {
       if (lovableTokens <= curr.messages && 
           (prev.messages > curr.messages || prev.messages < lovableTokens)) {
@@ -70,6 +69,12 @@ export const PricingCalculator = () => {
 
   return (
     <div className="max-w-4xl mx-auto space-y-6 p-6">
+      <div className="flex justify-center items-center gap-8 mb-12">
+        <img src="/lovable icon.svg" alt="Lovable" className="w-16 h-16" />
+        <img src="/supabase-logo-icon.svg" alt="Supabase" className="w-16 h-16" />
+        <img src="/cursor logo.png" alt="Cursor" className="w-16 h-16" />
+      </div>
+
       <h1 className="text-3xl font-bold text-center mb-8 neon-glow">
         Calculadora de Custo para Apps No-Code
       </h1>
@@ -77,7 +82,7 @@ export const PricingCalculator = () => {
       <CalculatorSection 
         title="Lovable.dev" 
         color="#646cff"
-        icon="/placeholder.svg"
+        icon="/lovable icon.svg"
       >
         <div className="space-y-4">
           <div>
@@ -107,7 +112,7 @@ export const PricingCalculator = () => {
       <CalculatorSection 
         title="Supabase" 
         color="#3ECF8E"
-        icon="/placeholder.svg"
+        icon="/supabase-logo-icon.svg"
       >
         <div className="space-y-4">
           <div>
@@ -138,7 +143,7 @@ export const PricingCalculator = () => {
       <CalculatorSection 
         title="Cursor" 
         color="#FF4D4D"
-        icon="/placeholder.svg"
+        icon="/cursor logo.png"
       >
         <div className="space-y-4">
           <div>
