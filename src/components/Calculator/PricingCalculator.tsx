@@ -11,9 +11,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useToast } from "@/components/ui/use-toast";
-import { PDFDownloadLink } from '@react-pdf/renderer';
-import { CostReportPDF } from './CostReportPDF';
-import { Download } from "lucide-react";
 
 const lovablePlans = [
   { name: "Free", messages: 5, price: 0 },
@@ -79,35 +76,45 @@ export const PricingCalculator = () => {
     const EXTRA_DATABASE_COST = 0.125;
 
     let totalCost = 0;
+    let isProPlanAdded = false;
 
     // Users calculation
     if (supabaseUsers > FREE_USERS) {
+      if (!isProPlanAdded) {
+        totalCost += 25;
+        isProPlanAdded = true;
+      }
+      
       if (supabaseUsers > PRO_USERS) {
         const extraUsers = supabaseUsers - PRO_USERS;
-        totalCost += 25 + (extraUsers * EXTRA_USER_COST);
-      } else {
-        totalCost += 25;
+        totalCost += extraUsers * EXTRA_USER_COST;
       }
     }
 
     // Storage calculation
     if (supabaseStorage > FREE_STORAGE) {
+      if (!isProPlanAdded) {
+        totalCost += 25;
+        isProPlanAdded = true;
+      }
+      
       if (supabaseStorage > PRO_STORAGE) {
         const extraStorage = supabaseStorage - PRO_STORAGE;
-        totalCost += 25 + (extraStorage * EXTRA_STORAGE_COST);
-      } else {
-        totalCost += 25;
+        totalCost += extraStorage * EXTRA_STORAGE_COST;
       }
     }
 
     // Database records calculation
     const recordsInGB = supabaseRecords / 2700000;
     if (recordsInGB > FREE_DATABASE) {
+      if (!isProPlanAdded) {
+        totalCost += 25;
+        isProPlanAdded = true;
+      }
+      
       if (recordsInGB > PRO_DATABASE) {
         const extraDB = recordsInGB - PRO_DATABASE;
         totalCost += extraDB * EXTRA_DATABASE_COST;
-      } else if (recordsInGB > FREE_DATABASE) {
-        totalCost += 25;
       }
     }
 
@@ -228,38 +235,6 @@ export const PricingCalculator = () => {
     const monthlyCosts = calculateMonthlyCosts();
     return monthlyCosts * (1 + profitMargin / 100);
   };
-
-  const renderPDFDownload = (): JSX.Element => (
-    <PDFDownloadLink
-      document={
-        <CostReportPDF
-          lovableTokens={lovableTokens}
-          recommendedPlan={recommendedPlan}
-          supabaseUsers={supabaseUsers}
-          supabaseRecords={supabaseRecords}
-          supabaseStorage={supabaseStorage}
-          cursorPlan={cursorPlan}
-          profitMargin={profitMargin}
-          maintenancePercentage={maintenancePercentage}
-          developmentTotal={calculateDevelopmentTotalWithMargin()}
-          monthlyTotal={calculateMonthlyTotalWithMargin()}
-          showInBRL={showInBRL}
-          exchangeRate={exchangeRate}
-        />
-      }
-      fileName="cost-report.pdf"
-    >
-      {({ loading }) => (
-        <Button 
-          className="w-full mt-4" 
-          disabled={loading}
-        >
-          <Download className="w-4 h-4 mr-2" />
-          {loading ? "Gerando PDF..." : "Exportar PDF"}
-        </Button>
-      )}
-    </PDFDownloadLink>
-  );
 
   return (
     <div className="max-w-7xl mx-auto space-y-6 p-6">
@@ -496,7 +471,6 @@ export const PricingCalculator = () => {
                       />
                       {showInBRL ? "Mostrar em USD" : "Mostrar em BRL"}
                     </Button>
-                    {renderPDFDownload()}
                   </div>
                 </div>
               </div>
