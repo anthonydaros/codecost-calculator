@@ -419,8 +419,8 @@ export const PricingCalculator = () => {
                 <Slider
                   value={[maintenancePercentage]}
                   onValueChange={([value]) => setMaintenancePercentage(value)}
-                  max={50}
-                  step={1}
+                  max={300}
+                  step={5}
                 />
               </div>
               <div className="pt-4 border-t border-white/10">
