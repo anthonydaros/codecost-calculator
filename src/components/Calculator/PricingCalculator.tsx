@@ -80,6 +80,7 @@ export const PricingCalculator = () => {
 
     let totalCost = 0;
 
+    // Users calculation
     if (supabaseUsers > FREE_USERS) {
       if (supabaseUsers > PRO_USERS) {
         const extraUsers = supabaseUsers - PRO_USERS;
@@ -89,15 +90,17 @@ export const PricingCalculator = () => {
       }
     }
 
+    // Storage calculation
     if (supabaseStorage > FREE_STORAGE) {
       if (supabaseStorage > PRO_STORAGE) {
         const extraStorage = supabaseStorage - PRO_STORAGE;
-        totalCost += extraStorage * EXTRA_STORAGE_COST;
-      } else if (supabaseStorage > FREE_STORAGE) {
+        totalCost += 25 + (extraStorage * EXTRA_STORAGE_COST);
+      } else {
         totalCost += 25;
       }
     }
 
+    // Database records calculation
     const recordsInGB = supabaseRecords / 2700000;
     if (recordsInGB > FREE_DATABASE) {
       if (recordsInGB > PRO_DATABASE) {
@@ -367,9 +370,15 @@ export const PricingCalculator = () => {
                 <Slider
                   value={[supabaseStorage]}
                   onValueChange={([value]) => setSupabaseStorage(value)}
-                  max={100}
+                  max={1024}
+                  min={1}
                   step={1}
                 />
+                <p className="text-xs text-gray-400 mt-1">
+                  {supabaseStorage <= 1 && "Grátis até 1GB"}
+                  {supabaseStorage > 1 && supabaseStorage <= 100 && "Plano Pro ($25/mês até 100GB)"}
+                  {supabaseStorage > 100 && `$0.021 por GB adicional após 100GB`}
+                </p>
               </div>
             </div>
           </CalculatorSection>
