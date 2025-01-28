@@ -163,9 +163,7 @@ export const PricingCalculator = () => {
         Calculadora de Custo para Apps No-Code
       </h1>
       <p className="text-center text-gray-300 max-w-2xl mx-auto mb-8">
-        Esta calculadora ajuda você a estimar o custo total para desenvolver seu aplicativo usando ferramentas no-code. 
-        Ajuste os valores de acordo com suas necessidades para obter uma estimativa precisa do investimento necessário.
-        O cálculo é baseado no uso combinado das três principais ferramentas: Lovable.dev para desenvolvimento, Supabase para backend, e Cursor para refinamentos.
+      Estime o custo do desenvolvimento do seu app no-code com Lovable.dev, Supabase e Cursor, ajustando os valores conforme suas necessidades.
       </p>
 
       <div className="grid grid-cols-4 gap-6">
