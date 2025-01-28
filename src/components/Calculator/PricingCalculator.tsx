@@ -67,11 +67,9 @@ export const PricingCalculator = () => {
 
   const calculateSupabaseCost = () => {
     const FREE_USERS = 50000;
+    const PRO_USERS = 100000;
     const FREE_STORAGE = 1; // 1GB
     const FREE_DATABASE = 0.5; // 500MB
-
-    const PRO_USERS = 100000;
-    const PRO_STORAGE = 100; // 100GB
     const PRO_DATABASE = 8; // 8GB
 
     const EXTRA_USER_COST = 0.00325;
