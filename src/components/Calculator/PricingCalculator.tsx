@@ -52,10 +52,55 @@ export const PricingCalculator = () => {
   };
 
   const calculateSupabaseCost = () => {
-    const usersCost = Math.floor(supabaseUsers / 50000) * 25;
-    const storageCost = supabaseStorage * 0.021;
-    const databaseCost = Math.floor(supabaseRecords / 8000000) * 25;
-    return usersCost + storageCost + databaseCost;
+    // Free tier limits
+    const FREE_USERS = 50000;
+    const FREE_STORAGE = 1; // 1GB
+    const FREE_DATABASE = 0.5; // 500MB
+
+    // Pro tier limits
+    const PRO_USERS = 100000;
+    const PRO_STORAGE = 100; // 100GB
+    const PRO_DATABASE = 8; // 8GB
+
+    // Additional costs
+    const EXTRA_USER_COST = 0.00325;
+    const EXTRA_STORAGE_COST = 0.021;
+    const EXTRA_DATABASE_COST = 0.125;
+
+    let totalCost = 0;
+
+    // Calculate users cost
+    if (supabaseUsers > FREE_USERS) {
+      if (supabaseUsers > PRO_USERS) {
+        const extraUsers = supabaseUsers - PRO_USERS;
+        totalCost += 25 + (extraUsers * EXTRA_USER_COST); // Pro plan base + extra users
+      } else {
+        totalCost += 25; // Pro plan base cost
+      }
+    }
+
+    // Calculate storage cost
+    if (supabaseStorage > FREE_STORAGE) {
+      if (supabaseStorage > PRO_STORAGE) {
+        const extraStorage = supabaseStorage - PRO_STORAGE;
+        totalCost += extraStorage * EXTRA_STORAGE_COST;
+      } else if (supabaseStorage > FREE_STORAGE) {
+        totalCost += 25; // Pro plan if exceeding free tier
+      }
+    }
+
+    // Calculate database records cost (assuming 1GB ≈ 2.7M records with overhead)
+    const recordsInGB = supabaseRecords / 2700000;
+    if (recordsInGB > FREE_DATABASE) {
+      if (recordsInGB > PRO_DATABASE) {
+        const extraDB = recordsInGB - PRO_DATABASE;
+        totalCost += extraDB * EXTRA_DATABASE_COST;
+      } else if (recordsInGB > FREE_DATABASE) {
+        totalCost += 25; // Pro plan if exceeding free tier
+      }
+    }
+
+    return totalCost;
   };
 
   const calculateCursorCost = () => {
