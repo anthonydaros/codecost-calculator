@@ -25,6 +25,7 @@ export const PricingCalculator = () => {
   const [lovableTokens, setLovableTokens] = useState(100);
   const [recommendedPlan, setRecommendedPlan] = useState(lovablePlans[0]);
   const [supabaseUsers, setSupabaseUsers] = useState(100);
+  const [supabaseRecords, setSupabaseRecords] = useState(1000000);
   const [supabaseStorage, setSupabaseStorage] = useState(1);
   const [cursorPlan, setCursorPlan] = useState("Hobby");
   const [profitMargin, setProfitMargin] = useState(30);
@@ -46,10 +47,11 @@ export const PricingCalculator = () => {
   };
 
   const calculateSupabaseCost = () => {
-    const basePrice = 25;
+    const basePrice = 25; // Preço base mensal
     const userCost = Math.max(0, supabaseUsers - 50000) * 0.00325;
     const storageCost = Math.max(0, supabaseStorage - 1) * 0.021;
-    return basePrice + userCost + storageCost;
+    const recordsCost = Math.max(0, supabaseRecords - 1000000) * 0.000001; // $0.125 por 100k registros acima de 1M
+    return (basePrice + userCost + storageCost + recordsCost) * 12; // Custo anual
   };
 
   const calculateCursorCost = () => {
@@ -120,7 +122,7 @@ export const PricingCalculator = () => {
             title="Supabase" 
             color="#3ECF8E"
             icon="/supabase-logo-icon.svg"
-            description="Plataforma de backend que fornece banco de dados, autenticação e armazenamento. O custo é baseado no número de usuários ativos e quantidade de armazenamento necessário para seu aplicativo."
+            description="Plataforma de backend que fornece banco de dados, autenticação e armazenamento. O custo é baseado no número de usuários ativos, quantidade de registros no banco e armazenamento necessário para seu aplicativo. Este é um custo mensal recorrente para manter seu aplicativo funcionando."
           >
             <div className="space-y-4">
               <div>
@@ -132,6 +134,17 @@ export const PricingCalculator = () => {
                   onValueChange={([value]) => setSupabaseUsers(value)}
                   max={100000}
                   step={1000}
+                />
+              </div>
+              <div>
+                <label className="block text-sm mb-2">
+                  Registros no Banco de Dados: {supabaseRecords.toLocaleString()}
+                </label>
+                <Slider
+                  value={[supabaseRecords]}
+                  onValueChange={([value]) => setSupabaseRecords(value)}
+                  max={10000000}
+                  step={100000}
                 />
               </div>
               <div>
@@ -193,8 +206,8 @@ export const PricingCalculator = () => {
                     <p className="text-lg">${calculateLovableCost()}</p>
                   </div>
                   <div>
-                    <p className="text-sm text-gray-400">Supabase</p>
-                    <p className="text-lg">${calculateSupabaseCost().toFixed(2)}</p>
+                    <p className="text-sm text-gray-400">Supabase (Mensal)</p>
+                    <p className="text-lg">${(calculateSupabaseCost() / 12).toFixed(2)}</p>
                   </div>
                   <div>
                     <p className="text-sm text-gray-400">Cursor</p>
