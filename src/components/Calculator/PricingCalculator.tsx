@@ -67,57 +67,47 @@ export const PricingCalculator = () => {
 
   const calculateSupabaseCost = () => {
     const FREE_USERS = 50000;
-    const PRO_USERS = 100000;
     const FREE_STORAGE = 1; // 1GB
     const FREE_DATABASE = 0.5; // 500MB
-    const PRO_DATABASE = 8; // 8GB
+
+    const PRO_USERS = 100000;
     const PRO_STORAGE = 100; // 100GB
+    const PRO_DATABASE = 8; // 8GB
 
     const EXTRA_USER_COST = 0.00325;
     const EXTRA_STORAGE_COST = 0.021;
     const EXTRA_DATABASE_COST = 0.125;
-    const PRO_PLAN_COST = 25;
 
     let totalCost = 0;
-    let isProPlanAdded = false;
 
     // Users calculation
     if (supabaseUsers > FREE_USERS) {
-      if (!isProPlanAdded) {
-        totalCost += PRO_PLAN_COST;
-        isProPlanAdded = true;
-      }
-      
       if (supabaseUsers > PRO_USERS) {
         const extraUsers = supabaseUsers - PRO_USERS;
-        totalCost += (extraUsers * EXTRA_USER_COST);
+        totalCost += 25 + (extraUsers * EXTRA_USER_COST);
+      } else {
+        totalCost += 25;
       }
     }
 
     // Storage calculation
     if (supabaseStorage > FREE_STORAGE) {
-      if (!isProPlanAdded) {
-        totalCost += PRO_PLAN_COST;
-        isProPlanAdded = true;
-      }
-
       if (supabaseStorage > PRO_STORAGE) {
         const extraStorage = supabaseStorage - PRO_STORAGE;
-        totalCost += (extraStorage * EXTRA_STORAGE_COST);
+        totalCost += 25 + (extraStorage * EXTRA_STORAGE_COST);
+      } else {
+        totalCost += 25;
       }
     }
 
-    // Database records calculation (convert to GB)
-    const recordsInGB = supabaseRecords / 2700000; // Approximate conversion
+    // Database records calculation
+    const recordsInGB = supabaseRecords / 2700000;
     if (recordsInGB > FREE_DATABASE) {
-      if (!isProPlanAdded) {
-        totalCost += PRO_PLAN_COST;
-        isProPlanAdded = true;
-      }
-
       if (recordsInGB > PRO_DATABASE) {
         const extraDB = recordsInGB - PRO_DATABASE;
-        totalCost += (extraDB * EXTRA_DATABASE_COST);
+        totalCost += extraDB * EXTRA_DATABASE_COST;
+      } else if (recordsInGB > FREE_DATABASE) {
+        totalCost += 25;
       }
     }
 
@@ -239,7 +229,7 @@ export const PricingCalculator = () => {
     return monthlyCosts * (1 + profitMargin / 100);
   };
 
-  const renderPDFDownload = () => (
+  const renderPDFDownload = (): JSX.Element => (
     <PDFDownloadLink
       document={
         <CostReportPDF
@@ -260,11 +250,12 @@ export const PricingCalculator = () => {
       fileName="cost-report.pdf"
     >
       {({ loading }) => (
-        <Button disabled={loading} type="button" asChild>
-          <div className="flex items-center">
-            <Download className="w-4 h-4 mr-2" />
-            {loading ? "Gerando PDF..." : "Exportar PDF"}
-          </div>
+        <Button 
+          className="w-full mt-4" 
+          disabled={loading}
+        >
+          <Download className="w-4 h-4 mr-2" />
+          {loading ? "Gerando PDF..." : "Exportar PDF"}
         </Button>
       )}
     </PDFDownloadLink>
@@ -273,9 +264,9 @@ export const PricingCalculator = () => {
   return (
     <div className="max-w-7xl mx-auto space-y-6 p-6">
       <div className="flex justify-center items-center gap-8 mb-12">
-        <img src="/lovable-icon.svg" alt="Lovable" className="w-16 h-16" />
+        <img src="/lovable icon.svg" alt="Lovable" className="w-16 h-16" />
         <img src="/supabase-logo-icon.svg" alt="Supabase" className="w-16 h-16" />
-        <img src="/cursor-logo.png" alt="Cursor" className="w-16 h-16" />
+        <img src="/cursor logo.png" alt="Cursor" className="w-16 h-16" />
       </div>
 
       <h1 className="text-3xl font-bold text-center mb-4 neon-glow">
@@ -290,7 +281,7 @@ export const PricingCalculator = () => {
           <CalculatorSection 
             title="Lovable.dev" 
             color="#646cff"
-            icon="/lovable-icon.svg"
+            icon="/lovable icon.svg"
             description="Plataforma principal para desenvolvimento do aplicativo. Permite criar interfaces completas e funcionais usando IA. O custo é baseado no número de mensagens necessárias para desenvolver seu app - quanto mais complexo, mais mensagens serão necessárias."
           >
             <div className="space-y-4">
@@ -395,7 +386,7 @@ export const PricingCalculator = () => {
           <CalculatorSection 
             title="Cursor" 
             color="#FF4D4D"
-            icon="/cursor-logo.png"
+            icon="/cursor logo.png"
             description="Editor de código com IA para fazer ajustes e refinamentos no frontend e backend. Ideal para pequenas alterações como mudança de cores e textos, sendo mais econômico que usar o Lovable para essas tarefas. Também é eficiente para desenvolvimento backend por executar códigos mais complexos. Disponível gratuitamente com 2000 completions e 50 requisições premium lentas, ou em planos pagos com recursos adicionais."
           >
             <div className="space-y-4">
