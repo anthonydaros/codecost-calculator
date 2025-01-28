@@ -11,6 +11,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useToast } from "@/components/ui/use-toast";
+import { DollarSign, Euro } from "lucide-react";
 
 const lovablePlans = [
   { name: "Free", messages: 5, price: 0 },
@@ -30,6 +31,12 @@ const DAYS_IN_MONTH = 30;
 const MONTHLY_BONUS_MESSAGES = DAILY_BONUS_MESSAGES * DAYS_IN_MONTH;
 
 type DeploymentOption = "netlify" | "vercel" | "vps" | null;
+type CurrencyOption = "USD" | "BRL" | "EUR";
+
+interface ExchangeRates {
+  BRL: number;
+  EUR: number;
+}
 
 export const PricingCalculator = () => {
   const { toast } = useToast();
@@ -46,29 +53,51 @@ export const PricingCalculator = () => {
   const [vpsPrice, setVpsPrice] = useState<number>(0);
   const [showInBRL, setShowInBRL] = useState(false);
   const [exchangeRate, setExchangeRate] = useState(0);
+  const [selectedCurrency, setSelectedCurrency] = useState<CurrencyOption>("USD");
+  const [exchangeRates, setExchangeRates] = useState<ExchangeRates>({
+    BRL: 5,
+    EUR: 0.85,
+  });
 
-  // Fetch current exchange rate when component mounts
+  // Fetch current exchange rates when component mounts
   useEffect(() => {
     fetch('https://api.exchangerate-api.com/v4/latest/USD')
       .then(response => response.json())
       .then(data => {
-        setExchangeRate(data.rates.BRL);
+        setExchangeRates({
+          BRL: data.rates.BRL,
+          EUR: data.rates.EUR,
+        });
+        toast({
+          title: "Cotações atualizadas",
+          description: `USD/BRL: ${data.rates.BRL.toFixed(2)} | USD/EUR: ${data.rates.EUR.toFixed(2)}`,
+        });
       })
       .catch(() => {
-        // Fallback to default rate if API fails
-        setExchangeRate(5);
+        toast({
+          title: "Erro ao atualizar cotações",
+          description: "Usando valores padrão",
+          variant: "destructive",
+        });
       });
-  }, []);
+  }, [toast]);
 
   const formatCurrency = (value: number): string => {
-    if (showInBRL) {
-      return `R$ ${(value * exchangeRate).toFixed(2)}`;
-    }
-    return `$${value.toFixed(2)}`;
-  };
+    const formatOptions: Intl.NumberFormatOptions = {
+      style: 'currency',
+      currency: selectedCurrency,
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    };
 
-  const toggleCurrency = () => {
-    setShowInBRL(!showInBRL);
+    switch (selectedCurrency) {
+      case "BRL":
+        return new Intl.NumberFormat('pt-BR', formatOptions).format(value * exchangeRates.BRL);
+      case "EUR":
+        return new Intl.NumberFormat('de-DE', formatOptions).format(value * exchangeRates.EUR);
+      default:
+        return new Intl.NumberFormat('en-US', formatOptions).format(value);
+    }
   };
 
   const calculateLovableCost = () => {
@@ -490,21 +519,39 @@ export const PricingCalculator = () => {
                     </div>
                   </div>
                   <div className="pt-4 border-t border-white/10 flex flex-col">
-                    <Button
-                      onClick={toggleCurrency}
-                      className="flex items-center gap-2"
-                      variant={showInBRL ? "default" : "outline"}
+                    <Select
+                      value={selectedCurrency}
+                      onValueChange={(value: CurrencyOption) => setSelectedCurrency(value)}
                     >
-                      <img
-                        src="https://flagcdn.com/w20/br.png"
-                        alt="Bandeira do Brasil"
-                        className="w-5 h-auto"
-                      />
-                      {showInBRL ? "Mostrar em USD" : "Mostrar em BRL"}
-                    </Button>
-                    {showInBRL && (
+                      <SelectTrigger className="w-[180px]">
+                        <SelectValue placeholder="Selecione a moeda" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="USD">
+                          <div className="flex items-center gap-2">
+                            <DollarSign className="w-4 h-4" />
+                            USD
+                          </div>
+                        </SelectItem>
+                        <SelectItem value="BRL">
+                          <div className="flex items-center gap-2">
+                            <span className="font-bold">R$</span>
+                            BRL
+                          </div>
+                        </SelectItem>
+                        <SelectItem value="EUR">
+                          <div className="flex items-center gap-2">
+                            <Euro className="w-4 h-4" />
+                            EUR
+                          </div>
+                        </SelectItem>
+                      </SelectContent>
+                    </Select>
+                    {selectedCurrency !== "USD" && (
                       <p className="text-xs text-gray-400 mt-2 text-center">
-                        Cotação: USD 1 = R$ {exchangeRate.toFixed(2)}
+                        Cotação: USD 1 = {selectedCurrency === "BRL" 
+                          ? `R$ ${exchangeRates.BRL.toFixed(2)}` 
+                          : `€ ${exchangeRates.EUR.toFixed(2)}`}
                       </p>
                     )}
                   </div>
