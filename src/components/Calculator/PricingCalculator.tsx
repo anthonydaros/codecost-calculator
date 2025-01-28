@@ -71,6 +71,7 @@ export const PricingCalculator = () => {
     const FREE_STORAGE = 1; // 1GB
     const FREE_DATABASE = 0.5; // 500MB
     const PRO_DATABASE = 8; // 8GB
+    const PRO_STORAGE = 100; // 100GB
 
     const EXTRA_USER_COST = 0.00325;
     const EXTRA_STORAGE_COST = 0.021;
@@ -245,7 +246,7 @@ export const PricingCalculator = () => {
       fileName="cost-report.pdf"
     >
       {({ loading }) => (
-        <Button disabled={loading}>
+        <Button disabled={loading} type="button">
           <Download className="w-4 h-4 mr-2" />
           {loading ? "Gerando PDF..." : "Exportar PDF"}
         </Button>
