@@ -338,8 +338,8 @@ export const PricingCalculator = () => {
                 <Slider
                   value={[supabaseUsers]}
                   onValueChange={([value]) => setSupabaseUsers(value)}
-                  max={1000000}
-                  step={100000}
+                  max={750000}
+                  step={10000}
                 />
               </div>
               <div>
@@ -349,7 +349,7 @@ export const PricingCalculator = () => {
                 <Slider
                   value={[supabaseRecords]}
                   onValueChange={([value]) => setSupabaseRecords(value)}
-                  max={1350000} // 500MB worth of records (2.7M records per GB * 0.5)
+                  max={135000000} // 50GB worth of records (2.7M records per GB * 50)
                   step={500000}
                 />
               </div>
