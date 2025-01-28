@@ -76,12 +76,18 @@ export const PricingCalculator = () => {
     const EXTRA_USER_COST = 0.00325;
     const EXTRA_STORAGE_COST = 0.021;
     const EXTRA_DATABASE_COST = 0.125;
+    const PRO_PLAN_COST = 25;
 
     let totalCost = 0;
+    let isProPlanAdded = false;
 
     // Users calculation
     if (supabaseUsers > FREE_USERS) {
-      totalCost += 25; // Pro plan cost
+      if (!isProPlanAdded) {
+        totalCost += PRO_PLAN_COST;
+        isProPlanAdded = true;
+      }
+      
       if (supabaseUsers > PRO_USERS) {
         const extraUsers = supabaseUsers - PRO_USERS;
         totalCost += (extraUsers * EXTRA_USER_COST);
@@ -90,7 +96,11 @@ export const PricingCalculator = () => {
 
     // Storage calculation
     if (supabaseStorage > FREE_STORAGE) {
-      if (!totalCost) totalCost += 25; // Pro plan cost if not already added
+      if (!isProPlanAdded) {
+        totalCost += PRO_PLAN_COST;
+        isProPlanAdded = true;
+      }
+
       if (supabaseStorage > PRO_STORAGE) {
         const extraStorage = supabaseStorage - PRO_STORAGE;
         totalCost += (extraStorage * EXTRA_STORAGE_COST);
@@ -100,7 +110,11 @@ export const PricingCalculator = () => {
     // Database records calculation (convert to GB)
     const recordsInGB = supabaseRecords / 2700000; // Approximate conversion
     if (recordsInGB > FREE_DATABASE) {
-      if (!totalCost) totalCost += 25; // Pro plan cost if not already added
+      if (!isProPlanAdded) {
+        totalCost += PRO_PLAN_COST;
+        isProPlanAdded = true;
+      }
+
       if (recordsInGB > PRO_DATABASE) {
         const extraDB = recordsInGB - PRO_DATABASE;
         totalCost += (extraDB * EXTRA_DATABASE_COST);
