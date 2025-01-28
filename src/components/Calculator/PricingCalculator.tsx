@@ -67,28 +67,41 @@ export const PricingCalculator = () => {
     const FREE_USERS = 50000;
     const FREE_STORAGE = 1; // 1GB
     const FREE_DATABASE = 0.5; // 500MB
+    const FREE_BANDWIDTH = 5; // 5GB
 
     // Pro Plan Limits
     const PRO_USERS = 100000;
     const PRO_STORAGE = 100; // 100GB
     const PRO_DATABASE = 8; // 8GB
+    const PRO_BANDWIDTH = 25; // 25GB
 
     // Cost per unit for exceeding Pro limits
     const EXTRA_USER_COST = 0.00325; // per user
     const EXTRA_STORAGE_COST = 0.021; // per GB
     const EXTRA_DATABASE_COST = 0.125; // per GB
+    const EXTRA_BANDWIDTH_COST = 0.09; // per GB
 
     let totalCost = 0;
     const recordsInGB = supabaseRecords / 2700000; // Convert records to GB
+    
+    // Calculate estimated bandwidth based on users and records
+    const estimatedBandwidth = Math.ceil((supabaseRecords / 1000000) + (supabaseUsers / 50000));
 
     // Check if Pro Plan is needed
     const needsProPlan = 
       supabaseUsers > FREE_USERS ||
       supabaseStorage > FREE_STORAGE ||
-      recordsInGB > FREE_DATABASE;
+      recordsInGB > FREE_DATABASE ||
+      estimatedBandwidth > FREE_BANDWIDTH;
 
     if (needsProPlan) {
       totalCost += 25; // Base Pro Plan cost
+
+      // Add bandwidth costs if exceeding Pro plan limit
+      if (estimatedBandwidth > PRO_BANDWIDTH) {
+        const extraBandwidth = estimatedBandwidth - PRO_BANDWIDTH;
+        totalCost += extraBandwidth * EXTRA_BANDWIDTH_COST;
+      }
     }
 
     // Calculate extra costs beyond Pro Plan limits
@@ -312,7 +325,7 @@ export const PricingCalculator = () => {
                 <Slider
                   value={[supabaseUsers]}
                   onValueChange={([value]) => setSupabaseUsers(value)}
-                  max={100000}
+                  max={1000000}
                   step={1000}
                 />
               </div>
@@ -323,7 +336,7 @@ export const PricingCalculator = () => {
                 <Slider
                   value={[supabaseRecords]}
                   onValueChange={([value]) => setSupabaseRecords(value)}
-                  max={10000000}
+                  max={2700000000} // Approximately 1TB worth of records
                   step={100000}
                 />
               </div>
@@ -343,6 +356,20 @@ export const PricingCalculator = () => {
                   {supabaseStorage > 1 && supabaseStorage <= 100 && "Plano Pro ($25/mês até 100GB)"}
                   {supabaseStorage > 100 && `$0.021 por GB adicional após 100GB`}
                 </p>
+              </div>
+              <div className="mt-4 p-4 bg-white/5 rounded-lg space-y-2">
+                <p className="text-sm text-gray-400">Largura de Banda Estimada:</p>
+                <div className="space-y-1">
+                  <p className="text-xs text-gray-500">
+                    Free Plan: 5 GB bandwidth
+                  </p>
+                  <p className="text-xs text-gray-500">
+                    Pro Plan ($25): 25 GB bandwidth + $0.09 por GB adicional
+                  </p>
+                  <p className="text-sm font-medium">
+                    Estimativa atual: {Math.ceil((supabaseRecords / 1000000) + (supabaseUsers / 50000))} GB
+                  </p>
+                </div>
               </div>
             </div>
           </CalculatorSection>
