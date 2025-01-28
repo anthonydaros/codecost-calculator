@@ -44,14 +44,24 @@ export const PricingCalculator = () => {
   }, [lovableTokens]);
 
   const calculateLovableCost = () => {
+    // Se o número de tokens for menor ou igual a 5, é gratuito
+    if (lovableTokens <= 5) return 0;
     return recommendedPlan.price;
   };
 
   const calculateSupabaseCost = () => {
-    const basePrice = 25; // Preço base mensal
+    // Plano gratuito: até 50.000 usuários, 500MB storage, 500.000 registros
     const userCost = Math.max(0, supabaseUsers - 50000) * 0.00325;
-    const storageCost = Math.max(0, supabaseStorage - 1) * 0.021;
-    const recordsCost = Math.max(0, supabaseRecords - 1000000) * 0.000001; // $0.125 por 100k registros acima de 1M
+    const storageCost = Math.max(0, supabaseStorage - 0.5) * 0.021;
+    const recordsCost = Math.max(0, supabaseRecords - 500000) * 0.000001;
+    
+    // Se todos os valores estiverem dentro do limite gratuito, retorna 0
+    if (supabaseUsers <= 50000 && supabaseStorage <= 0.5 && supabaseRecords <= 500000) {
+      return 0;
+    }
+    
+    // Caso contrário, calcula o custo com o plano Pro
+    const basePrice = 25; // Preço base mensal do plano Pro
     return (basePrice + userCost + storageCost + recordsCost) * 12; // Custo anual
   };
 
@@ -271,3 +281,5 @@ export const PricingCalculator = () => {
     </div>
   );
 };
+
+export default PricingCalculator;
