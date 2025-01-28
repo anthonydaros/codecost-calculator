@@ -226,7 +226,7 @@ export const PricingCalculator = () => {
     return monthlyCosts * (1 + profitMargin / 100);
   };
 
-  const renderPDFDownload = () => (
+  const renderPDFDownload = (): JSX.Element => (
     <PDFDownloadLink
       document={
         <CostReportPDF
@@ -246,7 +246,7 @@ export const PricingCalculator = () => {
       }
       fileName="cost-report.pdf"
     >
-      {({ loading }) => (
+      {({ loading }): JSX.Element => (
         <Button 
           className="w-full mt-4" 
           disabled={loading}
