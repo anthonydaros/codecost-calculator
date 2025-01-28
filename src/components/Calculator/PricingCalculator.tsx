@@ -82,7 +82,7 @@ export const PricingCalculator = () => {
     const EXTRA_BANDWIDTH_COST = 0.09; // per GB
 
     let totalCost = 0;
-    const recordsInGB = supabaseRecords / 2700000; // Convert records to GB
+    const recordsInGB = supabaseRecords / 500; // Convert records to GB
     
     // Calculate estimated bandwidth based on users and records
     const estimatedBandwidth = Math.ceil((supabaseRecords / 1000000) + (supabaseUsers / 50000));
@@ -360,12 +360,6 @@ export const PricingCalculator = () => {
               <div className="mt-4 p-4 bg-white/5 rounded-lg space-y-2">
                 <p className="text-sm text-gray-400">Largura de Banda Estimada:</p>
                 <div className="space-y-1">
-                  <p className="text-xs text-gray-500">
-                    Free Plan: 5 GB bandwidth
-                  </p>
-                  <p className="text-xs text-gray-500">
-                    Pro Plan ($25): 25 GB bandwidth + $0.09 por GB adicional
-                  </p>
                   <p className="text-sm font-medium">
                     Estimativa atual: {Math.ceil((supabaseRecords / 1000000) + (supabaseUsers / 50000))} GB
                   </p>
