@@ -229,7 +229,7 @@ export const PricingCalculator = () => {
     return monthlyCosts * (1 + profitMargin / 100);
   };
 
-  const renderPDFDownload = (): JSX.Element => (
+  const renderPDFDownload = () => (
     <PDFDownloadLink
       document={
         <CostReportPDF
