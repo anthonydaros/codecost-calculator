@@ -79,27 +79,29 @@ export const PricingCalculator = () => {
     const EXTRA_USER_COST = 0.00325; // per user
     const EXTRA_STORAGE_COST = 0.021; // per GB
     const EXTRA_DATABASE_COST = 0.125; // per GB
-    const EXTRA_BANDWIDTH_COST = 0.021; // per GB of database exceeding 8GB
+    const EXTRA_BANDWIDTH_COST = 0.09; // per GB
 
     let totalCost = 0;
-    const recordsInGB = supabaseRecords / 150; // Convert records to GB
-
-    // Adjusted bandwidth calculation: free bandwidth for up to 8GB of database usage
-    const estimatedBandwidth = recordsInGB <= PRO_DATABASE 
-      ? 0 // No cost for bandwidth within 8GB database
-      : (recordsInGB - PRO_DATABASE) * EXTRA_BANDWIDTH_COST;
+    const recordsInGB = supabaseRecords / 2700000; // Convert records to GB
+    
+    // Calculate estimated bandwidth based on users and records
+    const estimatedBandwidth = Math.ceil((supabaseRecords / 1000000) + (supabaseUsers / 50000));
 
     // Check if Pro Plan is needed
     const needsProPlan = 
       supabaseUsers > FREE_USERS ||
       supabaseStorage > FREE_STORAGE ||
-      recordsInGB > FREE_DATABASE;
+      recordsInGB > FREE_DATABASE ||
+      estimatedBandwidth > FREE_BANDWIDTH;
 
     if (needsProPlan) {
       totalCost += 25; // Base Pro Plan cost
 
-      // Add bandwidth costs only if exceeding Pro plan database limits
-      totalCost += estimatedBandwidth;
+      // Add bandwidth costs if exceeding Pro plan limit
+      if (estimatedBandwidth > PRO_BANDWIDTH) {
+        const extraBandwidth = estimatedBandwidth - PRO_BANDWIDTH;
+        totalCost += extraBandwidth * EXTRA_BANDWIDTH_COST;
+      }
     }
 
     // Calculate extra costs beyond Pro Plan limits
@@ -358,6 +360,12 @@ export const PricingCalculator = () => {
               <div className="mt-4 p-4 bg-white/5 rounded-lg space-y-2">
                 <p className="text-sm text-gray-400">Largura de Banda Estimada:</p>
                 <div className="space-y-1">
+                  <p className="text-xs text-gray-500">
+                    Free Plan: 5 GB bandwidth
+                  </p>
+                  <p className="text-xs text-gray-500">
+                    Pro Plan ($25): 25 GB bandwidth + $0.09 por GB adicional
+                  </p>
                   <p className="text-sm font-medium">
                     Estimativa atual: {Math.ceil((supabaseRecords / 1000000) + (supabaseUsers / 50000))} GB
                   </p>
