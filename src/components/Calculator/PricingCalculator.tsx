@@ -86,7 +86,7 @@ export const PricingCalculator = () => {
         const extraUsers = supabaseUsers - PRO_USERS;
         totalCost += 25 + (extraUsers * EXTRA_USER_COST);
       } else {
-        totalCost += 25;
+        totalCost += 25; // Pro plan cost
       }
     }
 
@@ -96,18 +96,18 @@ export const PricingCalculator = () => {
         const extraStorage = supabaseStorage - PRO_STORAGE;
         totalCost += 25 + (extraStorage * EXTRA_STORAGE_COST);
       } else {
-        totalCost += 25;
+        totalCost += 25; // Pro plan cost
       }
     }
 
-    // Database records calculation
-    const recordsInGB = supabaseRecords / 2700000;
+    // Database records calculation (convert to GB)
+    const recordsInGB = supabaseRecords / 2700000; // Approximate conversion
     if (recordsInGB > FREE_DATABASE) {
       if (recordsInGB > PRO_DATABASE) {
         const extraDB = recordsInGB - PRO_DATABASE;
-        totalCost += extraDB * EXTRA_DATABASE_COST;
-      } else if (recordsInGB > FREE_DATABASE) {
-        totalCost += 25;
+        totalCost += 25 + (extraDB * EXTRA_DATABASE_COST);
+      } else {
+        totalCost += 25; // Pro plan cost
       }
     }
 
