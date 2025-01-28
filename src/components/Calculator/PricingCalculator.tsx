@@ -68,65 +68,59 @@ export const PricingCalculator = () => {
     const FREE_STORAGE = 1; // 1GB
     const FREE_DATABASE = 0.5; // 500MB
     const FREE_BANDWIDTH = 5; // 5GB
-  
+
     // Pro Plan Limits
     const PRO_USERS = 100000;
     const PRO_STORAGE = 100; // 100GB
     const PRO_DATABASE = 8; // 8GB
-    const PRO_BANDWIDTH = 250; // 250GB
-  
+    const PRO_BANDWIDTH = 25; // 25GB
+
     // Cost per unit for exceeding Pro limits
     const EXTRA_USER_COST = 0.00325; // per user
     const EXTRA_STORAGE_COST = 0.021; // per GB
     const EXTRA_DATABASE_COST = 0.125; // per GB
-    const EXTRA_BANDWIDTH_COST = 0.09; // per GB
-  
+    const EXTRA_BANDWIDTH_COST = 0.021; // per GB of database exceeding 8GB
+
     let totalCost = 0;
     const recordsInGB = supabaseRecords / 150; // Convert records to GB
-  
-    // ** Updated Bandwidth Calculation **
-    // Assuming each user generates 50 KB per request and ~1000 requests per month.
-    const estimatedBandwidth = Math.ceil(
-      (supabaseUsers * 0.05 * 1000) / 1024 + // User activity bandwidth (MB -> GB)
-      (supabaseRecords * 0.001) // Records read/write bandwidth (in GB)
-    );
-  
+
+    // Adjusted bandwidth calculation: free bandwidth for up to 8GB of database usage
+    const estimatedBandwidth = recordsInGB <= PRO_DATABASE 
+      ? 0 // No cost for bandwidth within 8GB database
+      : (recordsInGB - PRO_DATABASE) * EXTRA_BANDWIDTH_COST;
+
     // Check if Pro Plan is needed
-    const needsProPlan =
+    const needsProPlan = 
       supabaseUsers > FREE_USERS ||
       supabaseStorage > FREE_STORAGE ||
-      recordsInGB > FREE_DATABASE ||
-      estimatedBandwidth > FREE_BANDWIDTH;
-  
+      recordsInGB > FREE_DATABASE;
+
     if (needsProPlan) {
       totalCost += 25; // Base Pro Plan cost
-  
-      // Add bandwidth costs if exceeding Pro plan limit
-      if (estimatedBandwidth > PRO_BANDWIDTH) {
-        const extraBandwidth = estimatedBandwidth - PRO_BANDWIDTH;
-        totalCost += extraBandwidth * EXTRA_BANDWIDTH_COST;
-      }
+
+      // Add bandwidth costs only if exceeding Pro plan database limits
+      totalCost += estimatedBandwidth;
     }
-  
+
     // Calculate extra costs beyond Pro Plan limits
     if (supabaseUsers > PRO_USERS) {
       const extraUsers = supabaseUsers - PRO_USERS;
       totalCost += extraUsers * EXTRA_USER_COST;
     }
-  
+
     if (supabaseStorage > PRO_STORAGE) {
       const extraStorage = supabaseStorage - PRO_STORAGE;
       totalCost += extraStorage * EXTRA_STORAGE_COST;
     }
-  
+
     if (recordsInGB > PRO_DATABASE) {
       const extraDB = recordsInGB - PRO_DATABASE;
       totalCost += extraDB * EXTRA_DATABASE_COST;
     }
-  
+
     return totalCost;
   };
-  
+
   const calculateCursorCost = () => {
     switch (cursorPlan) {
       case "Pro":
@@ -136,7 +130,7 @@ export const PricingCalculator = () => {
       default:
         return 0;
     }
-  };  
+  };
 
   const calculateDevelopmentCost = () => {
     return calculateLovableCost() + calculateCursorCost();
