@@ -250,10 +250,7 @@ export const PricingCalculator = () => {
       fileName="cost-report.pdf"
     >
       {({ loading }) => (
-        <Button 
-          className="w-full mt-4" 
-          disabled={loading}
-        >
+        <Button disabled={loading}>
           <Download className="w-4 h-4 mr-2" />
           {loading ? "Gerando PDF..." : "Exportar PDF"}
         </Button>
