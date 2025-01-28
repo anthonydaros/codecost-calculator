@@ -26,7 +26,6 @@ export const PricingCalculator = () => {
   const [recommendedPlan, setRecommendedPlan] = useState(lovablePlans[0]);
   const [supabaseUsers, setSupabaseUsers] = useState(100);
   const [supabaseStorage, setSupabaseStorage] = useState(1);
-  const [cursorTokens, setCursorTokens] = useState(1000);
   const [cursorPlan, setCursorPlan] = useState("Hobby");
   const [profitMargin, setProfitMargin] = useState(30);
 
@@ -68,7 +67,7 @@ export const PricingCalculator = () => {
   };
 
   return (
-    <div className="max-w-4xl mx-auto space-y-6 p-6">
+    <div className="max-w-7xl mx-auto space-y-6 p-6">
       <div className="flex justify-center items-center gap-8 mb-12">
         <img src="/lovable icon.svg" alt="Lovable" className="w-16 h-16" />
         <img src="/supabase-logo-icon.svg" alt="Supabase" className="w-16 h-16" />
@@ -84,140 +83,135 @@ export const PricingCalculator = () => {
         O cálculo é baseado no uso combinado das três principais ferramentas: Lovable.dev para desenvolvimento, Supabase para backend, e Cursor para refinamentos.
       </p>
 
-      <CalculatorSection 
-        title="Lovable.dev" 
-        color="#646cff"
-        icon="/lovable icon.svg"
-        description="Plataforma principal para desenvolvimento do aplicativo. Permite criar interfaces completas e funcionais usando IA. O custo é baseado no número de mensagens necessárias para desenvolver seu app - quanto mais complexo, mais mensagens serão necessárias."
-      >
-        <div className="space-y-4">
-          <div>
-            <label className="block text-sm mb-2">
-              Mensagens necessárias: {lovableTokens.toLocaleString()}
-            </label>
-            <Slider
-              value={[lovableTokens]}
-              onValueChange={([value]) => setLovableTokens(value)}
-              max={5000}
-              step={50}
-            />
-          </div>
-          <div className="bg-white/5 p-4 rounded-lg">
-            <p className="text-sm text-gray-300">Plano Recomendado:</p>
-            <p className="text-lg font-semibold">{recommendedPlan.name}</p>
-            <p className="text-sm text-gray-400">
-              Limite: {recommendedPlan.messages.toLocaleString()} mensagens
-            </p>
-            <p className="text-sm text-gray-400">
-              Preço: ${recommendedPlan.price}
-            </p>
-          </div>
-        </div>
-      </CalculatorSection>
-
-      <CalculatorSection 
-        title="Supabase" 
-        color="#3ECF8E"
-        icon="/supabase-logo-icon.svg"
-        description="Plataforma de backend que fornece banco de dados, autenticação e armazenamento. O custo é baseado no número de usuários ativos e quantidade de armazenamento necessário para seu aplicativo."
-      >
-        <div className="space-y-4">
-          <div>
-            <label className="block text-sm mb-2">
-              Usuários Ativos Mensais: {supabaseUsers.toLocaleString()}
-            </label>
-            <Slider
-              value={[supabaseUsers]}
-              onValueChange={([value]) => setSupabaseUsers(value)}
-              max={100000}
-              step={1000}
-            />
-          </div>
-          <div>
-            <label className="block text-sm mb-2">
-              Armazenamento (GB): {supabaseStorage}
-            </label>
-            <Slider
-              value={[supabaseStorage]}
-              onValueChange={([value]) => setSupabaseStorage(value)}
-              max={100}
-              step={1}
-            />
-          </div>
-        </div>
-      </CalculatorSection>
-
-      <CalculatorSection 
-        title="Cursor" 
-        color="#FF4D4D"
-        icon="/cursor logo.png"
-        description="Editor de código com IA para fazer ajustes e refinamentos no frontend e backend. Ideal para pequenas alterações como mudança de cores e textos, sendo mais econômico que usar o Lovable para essas tarefas. Também é eficiente para desenvolvimento backend por executar códigos mais complexos. Disponível gratuitamente com 2000 completions e 50 requisições premium lentas, ou em planos pagos com recursos adicionais."
-      >
-        <div className="space-y-4">
-          <div>
-            <label className="block text-sm mb-2">Plano</label>
-            <Select value={cursorPlan} onValueChange={setCursorPlan}>
-              <SelectTrigger>
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="Hobby">Hobby (Grátis)</SelectItem>
-                <SelectItem value="Pro">Pro ($20/mês)</SelectItem>
-                <SelectItem value="Business">Business ($40/mês)</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-          <div>
-            <label className="block text-sm mb-2">
-              Tokens por mês: {cursorTokens.toLocaleString()}
-            </label>
-            <Slider
-              value={[cursorTokens]}
-              onValueChange={([value]) => setCursorTokens(value)}
-              max={100000}
-              step={1000}
-            />
-          </div>
-        </div>
-      </CalculatorSection>
-
-      <CalculatorSection title="Resultados" className="mt-8">
-        <div className="space-y-4">
-          <div>
-            <label className="block text-sm mb-2">
-              Margem de Lucro: {profitMargin}%
-            </label>
-            <Slider
-              value={[profitMargin]}
-              onValueChange={([value]) => setProfitMargin(value)}
-              max={100}
-              step={1}
-            />
-          </div>
-          <div className="pt-4 border-t border-white/10">
-            <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-4 gap-6">
+        <div className="col-span-3 space-y-6">
+          <CalculatorSection 
+            title="Lovable.dev" 
+            color="#646cff"
+            icon="/lovable icon.svg"
+            description="Plataforma principal para desenvolvimento do aplicativo. Permite criar interfaces completas e funcionais usando IA. O custo é baseado no número de mensagens necessárias para desenvolver seu app - quanto mais complexo, mais mensagens serão necessárias."
+          >
+            <div className="space-y-4">
               <div>
-                <p className="text-sm text-gray-400">Lovable.dev</p>
-                <p className="text-lg">${calculateLovableCost()}</p>
+                <label className="block text-sm mb-2">
+                  Mensagens necessárias: {lovableTokens.toLocaleString()}
+                </label>
+                <Slider
+                  value={[lovableTokens]}
+                  onValueChange={([value]) => setLovableTokens(value)}
+                  max={5000}
+                  step={50}
+                />
               </div>
-              <div>
-                <p className="text-sm text-gray-400">Supabase</p>
-                <p className="text-lg">${calculateSupabaseCost().toFixed(2)}</p>
-              </div>
-              <div>
-                <p className="text-sm text-gray-400">Cursor</p>
-                <p className="text-lg">${calculateCursorCost()}</p>
-              </div>
-              <div>
-                <p className="text-sm text-gray-400">Total (com margem)</p>
-                <p className="text-2xl font-bold neon-glow">
-                  ${totalCost().toFixed(2)}
+              <div className="bg-white/5 p-4 rounded-lg">
+                <p className="text-sm text-gray-300">Plano Recomendado:</p>
+                <p className="text-lg font-semibold">{recommendedPlan.name}</p>
+                <p className="text-sm text-gray-400">
+                  Limite: {recommendedPlan.messages.toLocaleString()} mensagens
+                </p>
+                <p className="text-sm text-gray-400">
+                  Preço: ${recommendedPlan.price}
                 </p>
               </div>
             </div>
-          </div>
+          </CalculatorSection>
+
+          <CalculatorSection 
+            title="Supabase" 
+            color="#3ECF8E"
+            icon="/supabase-logo-icon.svg"
+            description="Plataforma de backend que fornece banco de dados, autenticação e armazenamento. O custo é baseado no número de usuários ativos e quantidade de armazenamento necessário para seu aplicativo."
+          >
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm mb-2">
+                  Usuários Ativos Mensais: {supabaseUsers.toLocaleString()}
+                </label>
+                <Slider
+                  value={[supabaseUsers]}
+                  onValueChange={([value]) => setSupabaseUsers(value)}
+                  max={100000}
+                  step={1000}
+                />
+              </div>
+              <div>
+                <label className="block text-sm mb-2">
+                  Armazenamento (GB): {supabaseStorage}
+                </label>
+                <Slider
+                  value={[supabaseStorage]}
+                  onValueChange={([value]) => setSupabaseStorage(value)}
+                  max={100}
+                  step={1}
+                />
+              </div>
+            </div>
+          </CalculatorSection>
+
+          <CalculatorSection 
+            title="Cursor" 
+            color="#FF4D4D"
+            icon="/cursor logo.png"
+            description="Editor de código com IA para fazer ajustes e refinamentos no frontend e backend. Ideal para pequenas alterações como mudança de cores e textos, sendo mais econômico que usar o Lovable para essas tarefas. Também é eficiente para desenvolvimento backend por executar códigos mais complexos. Disponível gratuitamente com 2000 completions e 50 requisições premium lentas, ou em planos pagos com recursos adicionais."
+          >
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm mb-2">Plano</label>
+                <Select value={cursorPlan} onValueChange={setCursorPlan}>
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="Hobby">Hobby (Grátis)</SelectItem>
+                    <SelectItem value="Pro">Pro ($20/mês)</SelectItem>
+                    <SelectItem value="Business">Business ($40/mês)</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+          </CalculatorSection>
         </div>
-      </CalculatorSection>
+
+        <div className="col-span-1">
+          <CalculatorSection title="Resultados" className="h-full">
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm mb-2">
+                  Margem de Lucro: {profitMargin}%
+                </label>
+                <Slider
+                  value={[profitMargin]}
+                  onValueChange={([value]) => setProfitMargin(value)}
+                  max={100}
+                  step={1}
+                />
+              </div>
+              <div className="pt-4 border-t border-white/10">
+                <div className="space-y-4">
+                  <div>
+                    <p className="text-sm text-gray-400">Lovable.dev</p>
+                    <p className="text-lg">${calculateLovableCost()}</p>
+                  </div>
+                  <div>
+                    <p className="text-sm text-gray-400">Supabase</p>
+                    <p className="text-lg">${calculateSupabaseCost().toFixed(2)}</p>
+                  </div>
+                  <div>
+                    <p className="text-sm text-gray-400">Cursor</p>
+                    <p className="text-lg">${calculateCursorCost()}</p>
+                  </div>
+                  <div>
+                    <p className="text-sm text-gray-400">Total (com margem)</p>
+                    <p className="text-2xl font-bold neon-glow">
+                      ${totalCost().toFixed(2)}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </CalculatorSection>
+        </div>
+      </div>
     </div>
   );
 };
