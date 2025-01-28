@@ -82,7 +82,7 @@ export const PricingCalculator = () => {
     const EXTRA_BANDWIDTH_COST = 0.09; // per GB
 
     let totalCost = 0;
-    const recordsInGB = supabaseRecords / 500; // Convert records to GB
+    const recordsInGB = supabaseRecords / 150; // Convert records to GB
     
     // Calculate estimated bandwidth based on users and records
     const estimatedBandwidth = Math.ceil((supabaseRecords / 1000000) + (supabaseUsers / 50000));
