@@ -75,14 +75,20 @@ export const PricingCalculator = () => {
         <img src="/cursor logo.png" alt="Cursor" className="w-16 h-16" />
       </div>
 
-      <h1 className="text-3xl font-bold text-center mb-8 neon-glow">
+      <h1 className="text-3xl font-bold text-center mb-4 neon-glow">
         Calculadora de Custo para Apps No-Code
       </h1>
+      <p className="text-center text-gray-300 max-w-2xl mx-auto mb-8">
+        Esta calculadora ajuda você a estimar o custo total para desenvolver seu aplicativo usando ferramentas no-code. 
+        Ajuste os valores de acordo com suas necessidades para obter uma estimativa precisa do investimento necessário.
+        O cálculo é baseado no uso combinado das três principais ferramentas: Lovable.dev para desenvolvimento, Supabase para backend, e Cursor para refinamentos.
+      </p>
 
       <CalculatorSection 
         title="Lovable.dev" 
         color="#646cff"
         icon="/lovable icon.svg"
+        description="Plataforma principal para desenvolvimento do aplicativo. Permite criar interfaces completas e funcionais usando IA. O custo é baseado no número de mensagens necessárias para desenvolver seu app - quanto mais complexo, mais mensagens serão necessárias."
       >
         <div className="space-y-4">
           <div>
@@ -113,6 +119,7 @@ export const PricingCalculator = () => {
         title="Supabase" 
         color="#3ECF8E"
         icon="/supabase-logo-icon.svg"
+        description="Plataforma de backend que fornece banco de dados, autenticação e armazenamento. O custo é baseado no número de usuários ativos e quantidade de armazenamento necessário para seu aplicativo."
       >
         <div className="space-y-4">
           <div>
@@ -144,6 +151,7 @@ export const PricingCalculator = () => {
         title="Cursor" 
         color="#FF4D4D"
         icon="/cursor logo.png"
+        description="Editor de código com IA para fazer ajustes e refinamentos. Ideal para pequenas alterações como mudança de cores, textos ou estilos, sendo mais econômico que usar o Lovable para essas tarefas simples."
       >
         <div className="space-y-4">
           <div>
