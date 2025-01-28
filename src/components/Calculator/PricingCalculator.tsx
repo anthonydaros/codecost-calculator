@@ -79,42 +79,32 @@ export const PricingCalculator = () => {
     const EXTRA_DATABASE_COST = 0.125;
 
     let totalCost = 0;
-    let planCost = 0;
 
     // Users calculation
     if (supabaseUsers > FREE_USERS) {
+      totalCost += 25; // Pro plan cost
       if (supabaseUsers > PRO_USERS) {
         const extraUsers = supabaseUsers - PRO_USERS;
-        planCost = 25;
-        totalCost += planCost + (extraUsers * EXTRA_USER_COST);
-      } else {
-        planCost = 25;
-        totalCost += planCost;
+        totalCost += (extraUsers * EXTRA_USER_COST);
       }
     }
 
     // Storage calculation
     if (supabaseStorage > FREE_STORAGE) {
+      if (!totalCost) totalCost += 25; // Pro plan cost if not already added
       if (supabaseStorage > PRO_STORAGE) {
         const extraStorage = supabaseStorage - PRO_STORAGE;
-        if (planCost === 0) planCost = 25;
         totalCost += (extraStorage * EXTRA_STORAGE_COST);
-      } else if (planCost === 0) {
-        planCost = 25;
-        totalCost += planCost;
       }
     }
 
     // Database records calculation (convert to GB)
     const recordsInGB = supabaseRecords / 2700000; // Approximate conversion
     if (recordsInGB > FREE_DATABASE) {
+      if (!totalCost) totalCost += 25; // Pro plan cost if not already added
       if (recordsInGB > PRO_DATABASE) {
         const extraDB = recordsInGB - PRO_DATABASE;
-        if (planCost === 0) planCost = 25;
         totalCost += (extraDB * EXTRA_DATABASE_COST);
-      } else if (planCost === 0) {
-        planCost = 25;
-        totalCost += planCost;
       }
     }
 
