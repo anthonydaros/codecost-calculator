@@ -13,371 +13,6 @@ import {
 import { useToast } from "@/components/ui/use-toast";
 import { DollarSign, Euro } from "lucide-react";
 
-type CurrencyOption = "USD" | "BRL" | "EUR";
-type LanguageOption = "en" | "pt" | "es" | "it" | "fr" | "de" | "hi" | "zh";
-
-interface ExchangeRates {
-  BRL: number;
-  EUR: number;
-}
-
-interface TranslationMap {
-  [key: string]: {
-    title: string;
-    description: string;
-    lovableSection: string;
-    supabaseSection: string;
-    cursorSection: string;
-    results: string;
-    profitMargin: string;
-    monthlyMaintenance: string;
-    developmentCosts: string;
-    monthlyCosts: string;
-    total: string;
-    totalWithMargin: string;
-    maintenance: string;
-    suggested: string;
-    requiredMessages: string;
-    recommendedPlan: string;
-    limit: string;
-    price: string;
-    monthlyBonus: string;
-    messages: string;
-    deploymentOptions: string;
-    storageSize: string;
-    bandwidth: string;
-    estimatedBandwidth: string;
-    freePlan: string;
-    proPlan: string;
-    monthlyPrice: string;
-    monthlyBandwidth: string;
-    builds: string;
-    sites: string;
-    serverless: string;
-    edgeFunctions: string;
-    collaboration: string;
-    extras: string;
-    vpsMonthlyPrice: string;
-    enterVpsPrice: string;
-    monthlyVpsCost: string;
-  };
-}
-
-const translations: TranslationMap = {
-  en: {
-    title: "No-Code App Cost Calculator",
-    description: "Estimate the cost of developing your no-code app with Lovable.dev, Supabase and Cursor, adjusting the values according to your needs.",
-    lovableSection: "Main platform for application development",
-    supabaseSection: "Backend platform that provides database",
-    cursorSection: "AI code editor",
-    results: "Results",
-    profitMargin: "Profit Margin",
-    monthlyMaintenance: "Monthly Maintenance",
-    developmentCosts: "Development Costs (one-time)",
-    monthlyCosts: "Monthly Costs",
-    total: "Total",
-    totalWithMargin: "Total (with margin)",
-    maintenance: "Maintenance",
-    suggested: "Suggested",
-    requiredMessages: "Required Messages",
-    recommendedPlan: "Recommended Plan",
-    limit: "Limit",
-    price: "Price",
-    monthlyBonus: "monthly bonus messages",
-    messages: "messages",
-    deploymentOptions: "Deployment Options",
-    storageSize: "Storage Size",
-    bandwidth: "Bandwidth",
-    estimatedBandwidth: "Current Estimate",
-    freePlan: "Free Plan",
-    proPlan: "Pro Plan",
-    monthlyPrice: "Monthly Price",
-    monthlyBandwidth: "Monthly Bandwidth",
-    builds: "Builds",
-    sites: "Sites",
-    serverless: "Serverless",
-    edgeFunctions: "Edge Functions",
-    collaboration: "Collaboration",
-    extras: "Extras",
-    vpsMonthlyPrice: "VPS Monthly Cost ($)",
-    enterVpsPrice: "Enter VPS monthly cost",
-    monthlyVpsCost: "Monthly VPS Cost",
-  },
-  pt: {
-    title: "Calculadora de Custo para Apps No-Code",
-    description: "Estime o custo do desenvolvimento do seu app no-code com Lovable.dev, Supabase e Cursor, ajustando os valores conforme suas necessidades.",
-    lovableSection: "Plataforma principal para desenvolvimento do aplicativo",
-    supabaseSection: "Plataforma de backend que fornece banco de dados",
-    cursorSection: "Editor de código com IA",
-    results: "Resultados",
-    profitMargin: "Margem de Lucro",
-    monthlyMaintenance: "Manutenção Mensal",
-    developmentCosts: "Custos de Desenvolvimento (único)",
-    monthlyCosts: "Custos Mensais",
-    total: "Total",
-    totalWithMargin: "Total (com margem)",
-    maintenance: "Manutenção",
-    suggested: "Sugerida",
-    requiredMessages: "Mensagens Necessárias",
-    recommendedPlan: "Plano Recomendado",
-    limit: "Limite",
-    price: "Preço",
-    monthlyBonus: "mensagens bônus mensal",
-    messages: "mensagens",
-    deploymentOptions: "Opções de Deploy",
-    storageSize: "Tamanho do Armazenamento",
-    bandwidth: "Largura de Banda",
-    estimatedBandwidth: "Estimativa Atual",
-    freePlan: "Plano Gratuito",
-    proPlan: "Plano Pro",
-    monthlyPrice: "Preço Mensal",
-    monthlyBandwidth: "Banda Mensal",
-    builds: "Builds",
-    sites: "Sites",
-    serverless: "Serverless",
-    edgeFunctions: "Edge Functions",
-    collaboration: "Colaboração",
-    extras: "Extras",
-    vpsMonthlyPrice: "Custo Mensal da VPS ($)",
-    enterVpsPrice: "Digite o valor mensal da VPS",
-    monthlyVpsCost: "Custo Mensal da VPS",
-  },
-  es: {
-    title: "Calculadora de Costos para Apps No-Code",
-    description: "Estime el costo de desarrollo de su aplicación no-code con Lovable.dev, Supabase y Cursor, ajustando los valores según sus necesidades.",
-    lovableSection: "Plataforma principal para desarrollo de aplicaciones",
-    supabaseSection: "Plataforma backend que proporciona base de datos",
-    cursorSection: "Editor de código con IA",
-    results: "Resultados",
-    profitMargin: "Margen de Beneficio",
-    monthlyMaintenance: "Mantenimiento Mensual",
-    developmentCosts: "Costos de Desarrollo (único)",
-    monthlyCosts: "Costos Mensuales",
-    total: "Total",
-    totalWithMargin: "Total (con margen)",
-    maintenance: "Mantenimiento",
-    suggested: "Sugerido",
-    requiredMessages: "Mensajes Requeridos",
-    recommendedPlan: "Plan Recomendado",
-    limit: "Límite",
-    price: "Precio",
-    monthlyBonus: "mensajes de bonificación mensual",
-    messages: "mensajes",
-    deploymentOptions: "Opciones de Implementación",
-    storageSize: "Tamaño de Almacenamiento",
-    bandwidth: "Ancho de Banda",
-    estimatedBandwidth: "Estimación Actual",
-    freePlan: "Plan Gratuito",
-    proPlan: "Plan Pro",
-    monthlyPrice: "Precio Mensual",
-    monthlyBandwidth: "Banda Mensual",
-    builds: "Compilaciones",
-    sites: "Sitios",
-    serverless: "Serverless",
-    edgeFunctions: "Edge Functions",
-    collaboration: "Colaboración",
-    extras: "Extras",
-    vpsMonthlyPrice: "Costo Mensual del VPS ($)",
-    enterVpsPrice: "Ingrese el costo mensual del VPS",
-    monthlyVpsCost: "Costo Mensual del VPS",
-  },
-  it: {
-    title: "Calcolatore di Costi per App No-Code",
-    description: "Stima il costo di sviluppo della tua app no-code con Lovable.dev, Supabase e Cursor, regolando i valori in base alle tue esigenze.",
-    lovableSection: "Piattaforma principale per lo sviluppo di applicazioni",
-    supabaseSection: "Piattaforma backend che fornisce database",
-    cursorSection: "Editor di codice con IA",
-    results: "Risultati",
-    profitMargin: "Margine di Profitto",
-    monthlyMaintenance: "Manutenzione Mensile",
-    developmentCosts: "Costi di Sviluppo (una tantum)",
-    monthlyCosts: "Costi Mensili",
-    total: "Totale",
-    totalWithMargin: "Totale (con margine)",
-    maintenance: "Manutenzione",
-    suggested: "Sugerito",
-    requiredMessages: "Messaggi Richiesti",
-    recommendedPlan: "Piano Consigliato",
-    limit: "Limite",
-    price: "Prezzo",
-    monthlyBonus: "messaggi bonus mensili",
-    messages: "messaggi",
-    deploymentOptions: "Opzioni di Deployment",
-    storageSize: "Dimensione Archiviazione",
-    bandwidth: "Larghezza di Banda",
-    estimatedBandwidth: "Stima Attuale",
-    freePlan: "Piano Gratuito",
-    proPlan: "Piano Pro",
-    monthlyPrice: "Prezzo Mensile",
-    monthlyBandwidth: "Banda Mensile",
-    builds: "Build",
-    sites: "Siti",
-    serverless: "Serverless",
-    edgeFunctions: "Edge Functions",
-    collaboration: "Collaborazione",
-    extras: "Extra",
-    vpsMonthlyPrice: "Costo Mensile VPS ($)",
-    enterVpsPrice: "Inserisci il costo mensile VPS",
-    monthlyVpsCost: "Costo Mensile VPS",
-  },
-  fr: {
-    title: "Calculateur de Coûts pour Apps No-Code",
-    description: "Estimez le coût de développement de votre application no-code avec Lovable.dev, Supabase et Cursor, en ajustant les valeurs selon vos besoins.",
-    lovableSection: "Plateforme principale pour le développement d'applications",
-    supabaseSection: "Plateforme backend fournissant une base de données",
-    cursorSection: "Éditeur de code avec IA",
-    results: "Résultats",
-    profitMargin: "Marge Bénéficiaire",
-    monthlyMaintenance: "Maintenance Mensuelle",
-    developmentCosts: "Coûts de Développement (unique)",
-    monthlyCosts: "Coûts Mensuels",
-    total: "Total",
-    totalWithMargin: "Total (avec marge)",
-    maintenance: "Maintenance",
-    suggested: "Suggéré",
-    requiredMessages: "Messages Requis",
-    recommendedPlan: "Plan Recommandé",
-    limit: "Limite",
-    price: "Prix",
-    monthlyBonus: "messages bonus mensuels",
-    messages: "messages",
-    deploymentOptions: "Options de Déploiement",
-    storageSize: "Taille de Stockage",
-    bandwidth: "Bande Passante",
-    estimatedBandwidth: "Estimation Actuelle",
-    freePlan: "Plan Gratuit",
-    proPlan: "Plan Pro",
-    monthlyPrice: "Prix Mensuel",
-    monthlyBandwidth: "Bande Passante Mensuelle",
-    builds: "Builds",
-    sites: "Sites",
-    serverless: "Serverless",
-    edgeFunctions: "Edge Functions",
-    collaboration: "Collaboration",
-    extras: "Extras",
-    vpsMonthlyPrice: "Coût Mensuel VPS ($)",
-    enterVpsPrice: "Entrez le coût mensuel VPS",
-    monthlyVpsCost: "Coût Mensuel VPS",
-  },
-  de: {
-    title: "Kostenrechner für No-Code Apps",
-    description: "Schätzen Sie die Entwicklungskosten Ihrer No-Code-App mit Lovable.dev, Supabase und Cursor, indem Sie die Werte nach Ihren Bedürfnissen anpassen.",
-    lovableSection: "Hauptplattform für Anwendungsentwicklung",
-    supabaseSection: "Backend-Plattform, die Datenbank bereitstellt",
-    cursorSection: "KI-Code-Editor",
-    results: "Ergebnisse",
-    profitMargin: "Gewinnspanne",
-    monthlyMaintenance: "Monatliche Wartung",
-    developmentCosts: "Entwicklungskosten (einmalig)",
-    monthlyCosts: "Monatliche Kosten",
-    total: "Gesamt",
-    totalWithMargin: "Gesamt (mit Marge)",
-    maintenance: "Wartung",
-    suggested: "Vorgeschlagen",
-    requiredMessages: "Erforderliche Nachrichten",
-    recommendedPlan: "Empfohlener Plan",
-    limit: "Limit",
-    price: "Preis",
-    monthlyBonus: "monatliche Bonus-Nachrichten",
-    messages: "Nachrichten",
-    deploymentOptions: "Bereitstellungsoptionen",
-    storageSize: "Speichergröße",
-    bandwidth: "Bandbreite",
-    estimatedBandwidth: "Aktuelle Schätzung",
-    freePlan: "Kostenloser Plan",
-    proPlan: "Pro Plan",
-    monthlyPrice: "Monatlicher Preis",
-    monthlyBandwidth: "Monatliche Bandbreite",
-    builds: "Builds",
-    sites: "Websites",
-    serverless: "Serverless",
-    edgeFunctions: "Edge Functions",
-    collaboration: "Zusammenarbeit",
-    extras: "Extras",
-    vpsMonthlyPrice: "Monatliche VPS-Kosten ($)",
-    enterVpsPrice: "Geben Sie die monatlichen VPS-Kosten ein",
-    monthlyVpsCost: "Monatliche VPS-Kosten",
-  },
-  hi: {
-    title: "नो-कोड ऐप्स के लिए लागत कैलकुलेटर",
-    description: "Lovable.dev, Supabase और Cursor के साथ अपने नो-कोड ऐप के विकास की लागत का अनुमान लगाएं, अपनी आवश्यकताओं के अनुसार मूल्यों को समायोजित करें।",
-    lovableSection: "एप्लिकेशन विकास के लिए मुख्य प्लेटफॉर्म",
-    supabaseSection: "बैकएंड प्लेटफॉर्म जो डेटाबेस प्रदान करता है",
-    cursorSection: "एआई कोड एडिटर",
-    results: "परिणाम",
-    profitMargin: "लाभ मार्जिन",
-    monthlyMaintenance: "मासिक रखरखाव",
-    developmentCosts: "विकास लागत (एकमुश्त)",
-    monthlyCosts: "मासिक लागत",
-    total: "कुल",
-    totalWithMargin: "कुल (मार्जिन के साथ)",
-    maintenance: "रखरखाव",
-    suggested: "सुझाया गया",
-    requiredMessages: "आवश्यक संदेश",
-    recommendedPlan: "अनुशंसित योजना",
-    limit: "सीमा",
-    price: "मूल्य",
-    monthlyBonus: "मासिक बोनस संदेश",
-    messages: "संदेश",
-    deploymentOptions: "डिप्लॉयमेंट विकल्प",
-    storageSize: "स्टोरेज आकार",
-    bandwidth: "बैंडविड्थ",
-    estimatedBandwidth: "वर्तमान अनुमान",
-    freePlan: "नि:शुल्क योजना",
-    proPlan: "प्रो योजना",
-    monthlyPrice: "मासिक मूल्य",
-    monthlyBandwidth: "मासिक बैंडविड्थ",
-    builds: "बिल्ड्स",
-    sites: "साइट्स",
-    serverless: "सर्वरलेस",
-    edgeFunctions: "एज फंक्शंस",
-    collaboration: "सहयोग",
-    extras: "अतिरिक्त",
-    vpsMonthlyPrice: "वीपीएस मासिक लागत ($)",
-    enterVpsPrice: "वीपीएस मासिक लागत दर्ज करें",
-    monthlyVpsCost: "वीपीएस मासिक लागत",
-  },
-  zh: {
-    title: "无代码应用成本计算器",
-    description: "使用Lovable.dev、Supabase和Cursor估算您的无代码应用开发成本，根据您的需求调整值。",
-    lovableSection: "应用程序开发的主要平台",
-    supabaseSection: "提供数据库的后端平台",
-    cursorSection: "AI代码编辑器",
-    results: "结果",
-    profitMargin: "利润率",
-    monthlyMaintenance: "每月维护",
-    developmentCosts: "开发成本（一次性）",
-    monthlyCosts: "每月成本",
-    total: "总计",
-    totalWithMargin: "总计（含利润）",
-    maintenance: "维护",
-    suggested: "建议",
-    requiredMessages: "所需消息数",
-    recommendedPlan: "推荐方案",
-    limit: "限制",
-    price: "价格",
-    monthlyBonus: "每月奖励消息",
-    messages: "消息",
-    deploymentOptions: "部署选项",
-    storageSize: "存储大小",
-    bandwidth: "带宽",
-    estimatedBandwidth: "当前估算",
-    freePlan: "免费方案",
-    proPlan: "专业方案",
-    monthlyPrice: "月度价格",
-    monthlyBandwidth: "月度带宽",
-    builds: "构建次数",
-    sites: "站点数",
-    serverless: "无服务器",
-    edgeFunctions: "边缘函数",
-    collaboration: "协作",
-    extras: "额外功能",
-    vpsMonthlyPrice: "VPS月度成本 ($)",
-    enterVpsPrice: "输入VPS月度成本",
-    monthlyVpsCost: "VPS月度成本",
-  },
-};
-
 const lovablePlans = [
   { name: "Free", messages: 5, price: 0 },
   { name: "Starter", messages: 100, price: 20 },
@@ -396,6 +31,12 @@ const DAYS_IN_MONTH = 30;
 const MONTHLY_BONUS_MESSAGES = DAILY_BONUS_MESSAGES * DAYS_IN_MONTH;
 
 type DeploymentOption = "netlify" | "vercel" | "vps" | null;
+type CurrencyOption = "USD" | "BRL" | "EUR";
+
+interface ExchangeRates {
+  BRL: number;
+  EUR: number;
+}
 
 export const PricingCalculator = () => {
   const { toast } = useToast();
@@ -410,13 +51,15 @@ export const PricingCalculator = () => {
   const [profitMargin, setProfitMargin] = useState(30);
   const [maintenancePercentage, setMaintenancePercentage] = useState(10);
   const [vpsPrice, setVpsPrice] = useState<number>(0);
+  const [showInBRL, setShowInBRL] = useState(false);
+  const [exchangeRate, setExchangeRate] = useState(0);
   const [selectedCurrency, setSelectedCurrency] = useState<CurrencyOption>("USD");
-  const [selectedLanguage, setSelectedLanguage] = useState<LanguageOption>("en");
   const [exchangeRates, setExchangeRates] = useState<ExchangeRates>({
     BRL: 5,
     EUR: 0.85,
   });
 
+  // Fetch current exchange rates when component mounts
   useEffect(() => {
     fetch('https://api.exchangerate-api.com/v4/latest/USD')
       .then(response => response.json())
@@ -462,16 +105,19 @@ export const PricingCalculator = () => {
   };
 
   const calculateSupabaseCost = () => {
+    // Free Plan Limits
     const FREE_USERS = 50000;
     const FREE_STORAGE = 1; // 1GB
     const FREE_DATABASE = 0.5; // 500MB
     const FREE_BANDWIDTH = 5; // 5GB
 
+    // Pro Plan Limits
     const PRO_USERS = 100000;
     const PRO_STORAGE = 100; // 100GB
     const PRO_DATABASE = 8; // 8GB
     const PRO_BANDWIDTH = 25; // 25GB
 
+    // Cost per unit for exceeding Pro limits
     const EXTRA_USER_COST = 0.00325; // per user
     const EXTRA_STORAGE_COST = 0.021; // per GB
     const EXTRA_DATABASE_COST = 0.125; // per GB
@@ -480,8 +126,10 @@ export const PricingCalculator = () => {
     let totalCost = 0;
     const recordsInGB = supabaseRecords / 2700000; // Convert records to GB
     
+    // Calculate estimated bandwidth based on database size only
     const estimatedBandwidth = Math.ceil(recordsInGB);
 
+    // Check if Pro Plan is needed
     const needsProPlan = 
       supabaseUsers > FREE_USERS ||
       supabaseStorage > FREE_STORAGE ||
@@ -491,12 +139,14 @@ export const PricingCalculator = () => {
     if (needsProPlan) {
       totalCost += 25; // Base Pro Plan cost
 
-      if (estimatedBandwidth > PRO_DATABASE) {
+      // Add bandwidth costs if exceeding Pro plan limit
+      if (estimatedBandwidth > PRO_DATABASE) { // Only charge bandwidth after 8GB
         const extraBandwidth = estimatedBandwidth - PRO_DATABASE;
         totalCost += extraBandwidth * EXTRA_BANDWIDTH_COST;
       }
     }
 
+    // Calculate extra costs beyond Pro Plan limits
     if (supabaseUsers > PRO_USERS) {
       const extraUsers = supabaseUsers - PRO_USERS;
       totalCost += extraUsers * EXTRA_USER_COST;
@@ -571,14 +221,14 @@ export const PricingCalculator = () => {
           <div className="mt-4 p-4 bg-white/5 rounded-lg space-y-2">
             <h4 className="font-semibold">Netlify Free</h4>
             <p className="text-sm text-gray-400">
-              {translations[selectedLanguage].price}: Gratuito<br />
-              {translations[selectedLanguage].monthlyBandwidth}: 100 GB/mês<br />
-              {translations[selectedLanguage].builds}: 300 min/mês<br />
-              {translations[selectedLanguage].sites}: Até 500<br />
-              {translations[selectedLanguage].serverless}: 125k invocações/mês<br />
-              {translations[selectedLanguage].edgeFunctions}: 1M invocações/mês<br />
-              {translations[selectedLanguage].collaboration}: 1 membro (Git ilimitado)<br />
-              {translations[selectedLanguage].extras}: Pré-visualizações, reversões instantâneas
+              Preço: Gratuito<br />
+              Banda: 100 GB/mês<br />
+              Builds: 300 min/mês<br />
+              Sites: Até 500<br />
+              Serverless: 125k invocações/mês<br />
+              Edge Functions: 1M invocações/mês<br />
+              Colaboração: 1 membro (Git ilimitado)<br />
+              Extras: Pré-visualizações, reversões instantâneas
             </p>
           </div>
         );
@@ -587,14 +237,14 @@ export const PricingCalculator = () => {
           <div className="mt-4 p-4 bg-white/5 rounded-lg space-y-2">
             <h4 className="font-semibold">Vercel Hobby</h4>
             <p className="text-sm text-gray-400">
-              {translations[selectedLanguage].price}: Gratuito<br />
-              {translations[selectedLanguage].monthlyBandwidth}: 100 GB/mês<br />
-              {translations[selectedLanguage].builds}: 6.000 min/mês<br />
-              {translations[selectedLanguage].sites}: Até 200<br />
-              {translations[selectedLanguage].serverless}: 100k invocações/mês<br />
-              {translations[selectedLanguage].edgeFunctions}: 1M invocações/mês<br />
-              {translations[selectedLanguage].collaboration}: Sem equipe<br />
-              {translations[selectedLanguage].extras}: CI/CD, insights, mitigação DDoS, firewall
+              Preço: Gratuito<br />
+              Banda: 100 GB/mês<br />
+              Builds: 6.000 min/mês<br />
+              Projetos: Até 200<br />
+              Serverless: 100k invocações/mês<br />
+              Edge Functions: 1M invocações/mês<br />
+              Colaboração: Sem equipe<br />
+              Extras: CI/CD, insights, mitigação DDoS, firewall
             </p>
           </div>
         );
@@ -603,14 +253,14 @@ export const PricingCalculator = () => {
           <div className="mt-4 p-4 bg-white/5 rounded-lg space-y-3">
             <h4 className="font-semibold">VPS Customizada</h4>
             <div className="space-y-2">
-              <label className="text-sm text-gray-400">{translations[selectedLanguage].vpsMonthlyPrice}</label>
+              <label className="text-sm text-gray-400">Custo mensal da VPS ($)</label>
               <Input
                 type="number"
                 min="0"
                 value={vpsPrice}
                 onChange={(e) => setVpsPrice(Number(e.target.value))}
                 className="w-full"
-                placeholder={translations[selectedLanguage].enterVpsPrice}
+                placeholder="Digite o valor mensal da VPS"
               />
             </div>
           </div>
@@ -640,61 +290,11 @@ export const PricingCalculator = () => {
         <img src="/cursor logo.png" alt="Cursor" className="w-16 h-16" />
       </div>
 
-      <div className="flex items-center gap-4 justify-end mb-6">
-        <Select
-          value={selectedLanguage}
-          onValueChange={(value) => setSelectedLanguage(value as LanguageOption)}
-        >
-          <SelectTrigger className="w-[180px]">
-            <SelectValue placeholder="Select language" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="en">English</SelectItem>
-            <SelectItem value="pt">Português</SelectItem>
-            <SelectItem value="es">Español</SelectItem>
-            <SelectItem value="it">Italiano</SelectItem>
-            <SelectItem value="fr">Français</SelectItem>
-            <SelectItem value="de">Deutsch</SelectItem>
-            <SelectItem value="hi">हिन्दी</SelectItem>
-            <SelectItem value="zh">中文</SelectItem>
-          </SelectContent>
-        </Select>
-
-        <Select
-          value={selectedCurrency}
-          onValueChange={(value) => setSelectedCurrency(value as CurrencyOption)}
-        >
-          <SelectTrigger className="w-[180px]">
-            <SelectValue placeholder="Select currency" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="USD">
-              <div className="flex items-center gap-2">
-                <DollarSign className="w-4 h-4" />
-                USD
-              </div>
-            </SelectItem>
-            <SelectItem value="BRL">
-              <div className="flex items-center gap-2">
-                <DollarSign className="w-4 h-4" />
-                BRL
-              </div>
-            </SelectItem>
-            <SelectItem value="EUR">
-              <div className="flex items-center gap-2">
-                <Euro className="w-4 h-4" />
-                EUR
-              </div>
-            </SelectItem>
-          </SelectContent>
-        </Select>
-      </div>
-
       <h1 className="text-3xl font-bold text-center mb-4 neon-glow">
-        {translations[selectedLanguage].title}
+        Calculadora de Custo para Apps No-Code
       </h1>
       <p className="text-center text-gray-300 max-w-2xl mx-auto mb-8">
-        {translations[selectedLanguage].description}
+      Estime o custo do desenvolvimento do seu app no-code com Lovable.dev, Supabase e Cursor, ajustando os valores conforme suas necessidades.
       </p>
 
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
@@ -703,12 +303,12 @@ export const PricingCalculator = () => {
             title="Lovable.dev" 
             color="#646cff"
             icon="/lovable icon.svg"
-            description={translations[selectedLanguage].lovableSection}
+            description="Plataforma principal para desenvolvimento do aplicativo. Permite criar interfaces completas e funcionais usando IA. O custo é baseado no número de mensagens necessárias para desenvolver seu app - quanto mais complexo, mais mensagens serão necessárias."
           >
             <div className="space-y-4">
               <div>
                 <label className="block text-sm mb-2">
-                  {translations[selectedLanguage].requiredMessages}: {lovableTokens.toLocaleString()}
+                  Mensagens necessárias: {lovableTokens.toLocaleString()}
                 </label>
                 <Slider
                   value={[lovableTokens]}
@@ -718,18 +318,18 @@ export const PricingCalculator = () => {
                 />
               </div>
               <div className="bg-white/5 p-4 rounded-lg">
-                <p className="text-sm text-gray-300">{translations[selectedLanguage].recommendedPlan}:</p>
+                <p className="text-sm text-gray-300">Plano Recomendado:</p>
                 <p className="text-lg font-semibold">{recommendedPlan.name}</p>
                 <p className="text-sm text-gray-400">
-                  {translations[selectedLanguage].limit}: {recommendedPlan.messages.toLocaleString()} {translations[selectedLanguage].messages}
-                  {recommendedPlan.price > 0 && ` + ${MONTHLY_BONUS_MESSAGES} ${translations[selectedLanguage].monthlyBonus}`}
+                  Limite: {recommendedPlan.messages.toLocaleString()} mensagens
+                  {recommendedPlan.price > 0 && ` + ${MONTHLY_BONUS_MESSAGES} mensagens bônus mensal`}
                 </p>
                 <p className="text-sm text-gray-400">
-                  {translations[selectedLanguage].price}: {formatCurrency(recommendedPlan.price)}
+                  Preço: {formatCurrency(recommendedPlan.price)}
                 </p>
               </div>
               <div className="space-y-2">
-                <p className="text-sm font-semibold">{translations[selectedLanguage].deploymentOptions}:</p>
+                <p className="text-sm font-semibold">Opções de Deploy:</p>
                 <div className="flex gap-2">
                   <Button
                     variant={selectedDeployment === "netlify" ? "default" : "outline"}
@@ -759,7 +359,7 @@ export const PricingCalculator = () => {
             title="Supabase" 
             color="#3ECF8E"
             icon="/supabase-logo-icon.svg"
-            description={translations[selectedLanguage].supabaseSection}
+            description="Plataforma de backend que fornece banco de dados, autenticação e armazenamento. O custo é baseado no número de usuários ativos, quantidade de registros no banco e armazenamento necessário para seu aplicativo. Este é um custo mensal recorrente para manter seu aplicativo funcionando."
           >
             <div className="space-y-4">
               <div>
@@ -802,16 +402,16 @@ export const PricingCalculator = () => {
                 </p>
               </div>
               <div className="mt-4 p-4 bg-white/5 rounded-lg space-y-2">
-                <p className="text-sm text-gray-400">{translations[selectedLanguage].bandwidth}:</p>
+                <p className="text-sm text-gray-400">Largura de Banda Estimada:</p>
                 <div className="space-y-1">
                   <p className="text-xs text-gray-500">
-                    {translations[selectedLanguage].freePlan}: 5 GB bandwidth
+                    Free Plan: 5 GB bandwidth
                   </p>
                   <p className="text-xs text-gray-500">
-                    {translations[selectedLanguage].proPlan} ({formatCurrency(25)}): 25 GB bandwidth + {formatCurrency(0.09)} por GB adicional após 8GB
+                    Pro Plan ({formatCurrency(25)}): 25 GB bandwidth + {formatCurrency(0.09)} por GB adicional após 8GB
                   </p>
                   <p className="text-sm font-medium">
-                    {translations[selectedLanguage].estimatedBandwidth}: {Math.ceil(supabaseRecords / 2700000)} GB
+                    Estimativa atual: {Math.ceil(supabaseRecords / 2700000)} GB
                   </p>
                 </div>
               </div>
@@ -820,65 +420,140 @@ export const PricingCalculator = () => {
 
           <CalculatorSection 
             title="Cursor" 
-            color="#000000"
+            color="#FF4D4D"
             icon="/cursor logo.png"
-            description={translations[selectedLanguage].cursorSection}
+            description="Editor de código com IA para fazer ajustes e refinamentos no frontend e backend. Ideal para pequenas alterações como mudança de cores e textos, sendo mais econômico que usar o Lovable para essas tarefas. Também é eficiente para desenvolvimento backend por executar códigos mais complexos. Disponível gratuitamente com 2000 completions e 50 requisições premium lentas, ou em planos pagos com recursos adicionais."
           >
             <div className="space-y-4">
-              <Select
-                value={cursorPlan}
-                onValueChange={(value) => setCursorPlan(value)}
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="Select plan" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="Hobby">Hobby ($0/month)</SelectItem>
-                  <SelectItem value="Pro">Pro ($20/month)</SelectItem>
-                  <SelectItem value="Business">Business ($40/month)</SelectItem>
-                </SelectContent>
-              </Select>
+              <div>
+                <label className="block text-sm mb-2">Plano</label>
+                <Select value={cursorPlan} onValueChange={setCursorPlan}>
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="Hobby">Hobby (Grátis)</SelectItem>
+                    <SelectItem value="Pro">Pro ($20/mês)</SelectItem>
+                    <SelectItem value="Business">Business ($40/mês)</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
             </div>
           </CalculatorSection>
         </div>
 
-        <div className="space-y-6">
-          <CalculatorSection 
-            title={translations[selectedLanguage].results}
-            color="white"
-          >
+        <div className="col-span-1">
+          <CalculatorSection title="Resultados" className="h-full">
             <div className="space-y-4">
               <div>
                 <label className="block text-sm mb-2">
-                  {translations[selectedLanguage].profitMargin} ({profitMargin}%)
+                  Margem de Lucro: {profitMargin}%
                 </label>
                 <Slider
                   value={[profitMargin]}
                   onValueChange={([value]) => setProfitMargin(value)}
-                  max={100}
-                  step={1}
+                  max={500}
+                  step={10}
                 />
               </div>
               <div>
                 <label className="block text-sm mb-2">
-                  {translations[selectedLanguage].maintenance} ({maintenancePercentage}%)
+                  Manutenção Mensal: {maintenancePercentage}% (Lucro)
                 </label>
                 <Slider
                   value={[maintenancePercentage]}
                   onValueChange={([value]) => setMaintenancePercentage(value)}
-                  max={100}
-                  step={1}
+                  max={300}
+                  step={5}
                 />
               </div>
-              <div className="pt-4 border-t border-gray-800">
-                <div className="space-y-2">
-                  <div className="flex justify-between">
-                    <span className="text-sm text-gray-400">{translations[selectedLanguage].developmentCosts}</span>
-                    <span>{formatCurrency(calculateDevelopmentTotalWithMargin())}</span>
+              <div className="pt-4 border-t border-white/10">
+                <div className="space-y-4">
+                  <div>
+                    <p className="text-lg font-semibold border-b border-white/10 pb-2">
+                      Custos de Desenvolvimento (único)
+                    </p>
+                    <div className="space-y-2 mt-2">
+                      <div>
+                        <p className="text-sm text-gray-400">Lovable.dev</p>
+                        <p className="text-lg">{formatCurrency(calculateLovableCost())}</p>
+                      </div>
+                      <div>
+                        <p className="text-sm text-gray-400">Cursor</p>
+                        <p className="text-lg">{formatCurrency(calculateCursorCost())}</p>
+                      </div>
+                      <div className="pt-2 border-t border-white/10">
+                        <p className="text-sm text-gray-400">Total (com margem)</p>
+                        <p className="text-lg font-bold neon-glow">
+                          {formatCurrency(calculateDevelopmentTotalWithMargin())}
+                        </p>
+                      </div>
+                    </div>
                   </div>
-                  <div className="flex justify-between">
-                    <span className="text-sm text-gray-400">{translations[selectedLanguage].monthlyCosts}</span>
-                    <span>{formatCurrency(calculateMonthlyTotalWithMargin())}</span>
+                  
+                  <div className="w-full h-px bg-gradient-to-r from-transparent via-white/50 to-transparent my-6 shadow-[0_0_5px_rgba(255,255,255,0.5)] animate-pulse" />
+                  
+                  <div>
+                    <p className="text-lg font-semibold border-b border-white/10 pb-2">
+                      Custos Mensais
+                    </p>
+                    <div className="space-y-2 mt-2">
+                      <div>
+                        <p className="text-sm text-gray-400">Supabase</p>
+                        <p className="text-lg">{formatCurrency(calculateSupabaseCost())}</p>
+                      </div>
+                      {maintenancePercentage > 0 && (
+                        <div>
+                          <p className="text-sm text-gray-400">Manutenção Sugerida</p>
+                          <p className="text-lg">
+                            {formatCurrency((calculateDevelopmentCost() * maintenancePercentage) / 100)}
+                          </p>
+                        </div>
+                      )}
+                      <div className="pt-2 border-t border-white/10">
+                        <p className="text-sm text-gray-400">Total</p>
+                        <p className="text-lg font-bold neon-glow">
+                          {formatCurrency(calculateMonthlyTotalWithMargin())}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="pt-4 border-t border-white/10 flex flex-col">
+                    <Select
+                      value={selectedCurrency}
+                      onValueChange={(value: CurrencyOption) => setSelectedCurrency(value)}
+                    >
+                      <SelectTrigger className="w-[180px]">
+                        <SelectValue placeholder="Selecione a moeda" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="USD">
+                          <div className="flex items-center gap-2">
+                            <DollarSign className="w-4 h-4" />
+                            USD
+                          </div>
+                        </SelectItem>
+                        <SelectItem value="BRL">
+                          <div className="flex items-center gap-2">
+                            <span className="font-bold">R$</span>
+                            BRL
+                          </div>
+                        </SelectItem>
+                        <SelectItem value="EUR">
+                          <div className="flex items-center gap-2">
+                            <Euro className="w-4 h-4" />
+                            EUR
+                          </div>
+                        </SelectItem>
+                      </SelectContent>
+                    </Select>
+                    {selectedCurrency !== "USD" && (
+                      <p className="text-xs text-gray-400 mt-2 text-center">
+                        Cotação: USD 1 = {selectedCurrency === "BRL" 
+                          ? `R$ ${exchangeRates.BRL.toFixed(2)}` 
+                          : `€ ${exchangeRates.EUR.toFixed(2)}`}
+                      </p>
+                    )}
                   </div>
                 </div>
               </div>
@@ -886,6 +561,11 @@ export const PricingCalculator = () => {
           </CalculatorSection>
         </div>
       </div>
+      <footer className="mt-12 text-center text-gray-400">
+        Desenvolvido por Anthony Max
+      </footer>
     </div>
   );
 };
+
+export default PricingCalculator;
