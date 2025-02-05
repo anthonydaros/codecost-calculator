@@ -11,7 +11,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useToast } from "@/components/ui/use-toast";
-import { DollarSign, Euro, Globe, Languages } from "lucide-react";
+import { DollarSign, Euro } from "lucide-react";
 
 type CurrencyOption = "USD" | "BRL" | "EUR";
 type LanguageOption = "en" | "pt" | "es" | "it" | "fr" | "de" | "hi" | "zh";
@@ -195,7 +195,7 @@ const translations: TranslationMap = {
     total: "Totale",
     totalWithMargin: "Totale (con margine)",
     maintenance: "Manutenzione",
-    suggested: "Suggerito",
+    suggested: "Sugerito",
     requiredMessages: "Messaggi Richiesti",
     recommendedPlan: "Piano Consigliato",
     limit: "Limite",
@@ -640,6 +640,56 @@ export const PricingCalculator = () => {
         <img src="/cursor logo.png" alt="Cursor" className="w-16 h-16" />
       </div>
 
+      <div className="flex items-center gap-4 justify-end mb-6">
+        <Select
+          value={selectedLanguage}
+          onValueChange={(value) => setSelectedLanguage(value as LanguageOption)}
+        >
+          <SelectTrigger className="w-[180px]">
+            <SelectValue placeholder="Select language" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="en">English</SelectItem>
+            <SelectItem value="pt">Português</SelectItem>
+            <SelectItem value="es">Español</SelectItem>
+            <SelectItem value="it">Italiano</SelectItem>
+            <SelectItem value="fr">Français</SelectItem>
+            <SelectItem value="de">Deutsch</SelectItem>
+            <SelectItem value="hi">हिन्दी</SelectItem>
+            <SelectItem value="zh">中文</SelectItem>
+          </SelectContent>
+        </Select>
+
+        <Select
+          value={selectedCurrency}
+          onValueChange={(value) => setSelectedCurrency(value as CurrencyOption)}
+        >
+          <SelectTrigger className="w-[180px]">
+            <SelectValue placeholder="Select currency" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="USD">
+              <div className="flex items-center gap-2">
+                <DollarSign className="w-4 h-4" />
+                USD
+              </div>
+            </SelectItem>
+            <SelectItem value="BRL">
+              <div className="flex items-center gap-2">
+                <DollarSign className="w-4 h-4" />
+                BRL
+              </div>
+            </SelectItem>
+            <SelectItem value="EUR">
+              <div className="flex items-center gap-2">
+                <Euro className="w-4 h-4" />
+                EUR
+              </div>
+            </SelectItem>
+          </SelectContent>
+        </Select>
+      </div>
+
       <h1 className="text-3xl font-bold text-center mb-4 neon-glow">
         {translations[selectedLanguage].title}
       </h1>
@@ -764,3 +814,78 @@ export const PricingCalculator = () => {
                     {translations[selectedLanguage].estimatedBandwidth}: {Math.ceil(supabaseRecords / 2700000)} GB
                   </p>
                 </div>
+              </div>
+            </div>
+          </CalculatorSection>
+
+          <CalculatorSection 
+            title="Cursor" 
+            color="#000000"
+            icon="/cursor logo.png"
+            description={translations[selectedLanguage].cursorSection}
+          >
+            <div className="space-y-4">
+              <Select
+                value={cursorPlan}
+                onValueChange={(value) => setCursorPlan(value)}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Select plan" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="Hobby">Hobby ($0/month)</SelectItem>
+                  <SelectItem value="Pro">Pro ($20/month)</SelectItem>
+                  <SelectItem value="Business">Business ($40/month)</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </CalculatorSection>
+        </div>
+
+        <div className="space-y-6">
+          <CalculatorSection 
+            title={translations[selectedLanguage].results}
+            color="white"
+          >
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm mb-2">
+                  {translations[selectedLanguage].profitMargin} ({profitMargin}%)
+                </label>
+                <Slider
+                  value={[profitMargin]}
+                  onValueChange={([value]) => setProfitMargin(value)}
+                  max={100}
+                  step={1}
+                />
+              </div>
+              <div>
+                <label className="block text-sm mb-2">
+                  {translations[selectedLanguage].maintenance} ({maintenancePercentage}%)
+                </label>
+                <Slider
+                  value={[maintenancePercentage]}
+                  onValueChange={([value]) => setMaintenancePercentage(value)}
+                  max={100}
+                  step={1}
+                />
+              </div>
+              <div className="pt-4 border-t border-gray-800">
+                <div className="space-y-2">
+                  <div className="flex justify-between">
+                    <span className="text-sm text-gray-400">{translations[selectedLanguage].developmentCosts}</span>
+                    <span>{formatCurrency(calculateDevelopmentTotalWithMargin())}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-sm text-gray-400">{translations[selectedLanguage].monthlyCosts}</span>
+                    <span>{formatCurrency(calculateMonthlyTotalWithMargin())}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </CalculatorSection>
+        </div>
+      </div>
+    </div>
+  );
+};
