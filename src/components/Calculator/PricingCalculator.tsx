@@ -411,7 +411,9 @@ export const PricingCalculator = () => {
 
   const handleLanguageChange = (language: LanguageOption) => {
     const currentHostname = window.location.hostname;
-    const baseHostname = currentHostname.replace('.translate.goog', '');
+    const baseHostname = currentHostname
+      .replace('.translate.goog', '')
+      .replace(/\./g, '-');
     const translateUrl = `https://${baseHostname}.translate.goog/?_x_tr_sl=auto&_x_tr_tl=${languageMap[language].code}&_x_tr_hl=pt-BR&_x_tr_pto=wapp`;
     window.location.href = translateUrl;
   };
