@@ -14,161 +14,22 @@ import { useToast } from "@/components/ui/use-toast";
 import { DollarSign, Euro, Globe, Languages } from "lucide-react";
 
 type CurrencyOption = "USD" | "BRL" | "EUR";
-type LanguageOption = "en" | "pt" | "es" | "it" | "fr" | "de" | "hi" | "zh";
+type LanguageOption = "pt" | "en" | "es" | "it" | "fr" | "de" | "hi" | "zh";
 
 interface ExchangeRates {
   BRL: number;
   EUR: number;
 }
 
-interface TranslationMap {
-  [key: string]: {
-    title: string;
-    description: string;
-    lovableSection: string;
-    supabaseSection: string;
-    cursorSection: string;
-    results: string;
-    profitMargin: string;
-    monthlyMaintenance: string;
-    developmentCosts: string;
-    monthlyCosts: string;
-    total: string;
-    totalWithMargin: string;
-    maintenance: string;
-    suggested: string;
-  };
-}
-
-const translations: TranslationMap = {
-  en: {
-    title: "No-Code App Cost Calculator",
-    description: "Estimate the cost of developing your no-code app with Lovable.dev, Supabase and Cursor, adjusting the values according to your needs.",
-    lovableSection: "Main platform for application development",
-    supabaseSection: "Backend platform that provides database",
-    cursorSection: "AI code editor",
-    results: "Results",
-    profitMargin: "Profit Margin",
-    monthlyMaintenance: "Monthly Maintenance",
-    developmentCosts: "Development Costs (one-time)",
-    monthlyCosts: "Monthly Costs",
-    total: "Total",
-    totalWithMargin: "Total (with margin)",
-    maintenance: "Maintenance",
-    suggested: "Suggested",
-  },
-  pt: {
-    title: "Calculadora de Custo para Apps No-Code",
-    description: "Estime o custo do desenvolvimento do seu app no-code com Lovable.dev, Supabase e Cursor, ajustando os valores conforme suas necessidades.",
-    lovableSection: "Plataforma principal para desenvolvimento do aplicativo",
-    supabaseSection: "Plataforma de backend que fornece banco de dados",
-    cursorSection: "Editor de código com IA",
-    results: "Resultados",
-    profitMargin: "Margem de Lucro",
-    monthlyMaintenance: "Manutenção Mensal",
-    developmentCosts: "Custos de Desenvolvimento (único)",
-    monthlyCosts: "Custos Mensais",
-    total: "Total",
-    totalWithMargin: "Total (com margem)",
-    maintenance: "Manutenção",
-    suggested: "Sugerida",
-  },
-  es: {
-    title: "Calculadora de Costos para Apps No-Code",
-    description: "Estime el costo de desarrollo de su aplicación no-code con Lovable.dev, Supabase y Cursor, ajustando los valores según sus necesidades.",
-    lovableSection: "Plataforma principal para desarrollo de aplicaciones",
-    supabaseSection: "Plataforma backend que proporciona base de datos",
-    cursorSection: "Editor de código con IA",
-    results: "Resultados",
-    profitMargin: "Margen de Beneficio",
-    monthlyMaintenance: "Mantenimiento Mensual",
-    developmentCosts: "Costos de Desarrollo (único)",
-    monthlyCosts: "Costos Mensuales",
-    total: "Total",
-    totalWithMargin: "Total (con margen)",
-    maintenance: "Mantenimiento",
-    suggested: "Sugerido",
-  },
-  it: {
-    title: "Calcolatore di Costi per App No-Code",
-    description: "Stima il costo di sviluppo della tua app no-code con Lovable.dev, Supabase e Cursor, regolando i valori in base alle tue esigenze.",
-    lovableSection: "Piattaforma principale per lo sviluppo di applicazioni",
-    supabaseSection: "Piattaforma backend che fornisce database",
-    cursorSection: "Editor di codice con IA",
-    results: "Risultati",
-    profitMargin: "Margine di Profitto",
-    monthlyMaintenance: "Manutenzione Mensile",
-    developmentCosts: "Costi di Sviluppo (una tantum)",
-    monthlyCosts: "Costi Mensili",
-    total: "Totale",
-    totalWithMargin: "Totale (con margine)",
-    maintenance: "Manutenzione",
-    suggested: "Suggerito",
-  },
-  fr: {
-    title: "Calculateur de Coûts pour Apps No-Code",
-    description: "Estimez le coût de développement de votre application no-code avec Lovable.dev, Supabase et Cursor, en ajustant les valeurs selon vos besoins.",
-    lovableSection: "Plateforme principale pour le développement d'applications",
-    supabaseSection: "Plateforme backend fournissant une base de données",
-    cursorSection: "Éditeur de code avec IA",
-    results: "Résultats",
-    profitMargin: "Marge Bénéficiaire",
-    monthlyMaintenance: "Maintenance Mensuelle",
-    developmentCosts: "Coûts de Développement (unique)",
-    monthlyCosts: "Coûts Mensuels",
-    total: "Total",
-    totalWithMargin: "Total (avec marge)",
-    maintenance: "Maintenance",
-    suggested: "Suggéré",
-  },
-  de: {
-    title: "Kostenrechner für No-Code Apps",
-    description: "Schätzen Sie die Entwicklungskosten Ihrer No-Code-App mit Lovable.dev, Supabase und Cursor, indem Sie die Werte nach Ihren Bedürfnissen anpassen.",
-    lovableSection: "Hauptplattform für Anwendungsentwicklung",
-    supabaseSection: "Backend-Plattform, die Datenbank bereitstellt",
-    cursorSection: "KI-Code-Editor",
-    results: "Ergebnisse",
-    profitMargin: "Gewinnspanne",
-    monthlyMaintenance: "Monatliche Wartung",
-    developmentCosts: "Entwicklungskosten (einmalig)",
-    monthlyCosts: "Monatliche Kosten",
-    total: "Gesamt",
-    totalWithMargin: "Gesamt (mit Marge)",
-    maintenance: "Wartung",
-    suggested: "Vorgeschlagen",
-  },
-  hi: {
-    title: "नो-कोड ऐप्स के लिए लागत कैलकुलेटर",
-    description: "Lovable.dev, Supabase और Cursor के साथ अपने नो-कोड ऐप के विकास की लागत का अनुमान लगाएं, अपनी आवश्यकताओं के अनुसार मूल्यों को समायोजित करें।",
-    lovableSection: "एप्लिकेशन विकास के लिए मुख्य प्लेटफॉर्म",
-    supabaseSection: "बैकएंड प्लेटफॉर्म जो डेटाबेस प्रदान करता है",
-    cursorSection: "एआई कोड एडिटर",
-    results: "परिणाम",
-    profitMargin: "लाभ मार्जिन",
-    monthlyMaintenance: "मासिक रखरखाव",
-    developmentCosts: "विकास लागत (एकमुश्त)",
-    monthlyCosts: "मासिक लागत",
-    total: "कुल",
-    totalWithMargin: "कुल (मार्जिन के साथ)",
-    maintenance: "रखरखाव",
-    suggested: "सुझाया गया",
-  },
-  zh: {
-    title: "无代码应用成本计算器",
-    description: "使用Lovable.dev、Supabase和Cursor估算您的无代码应用开发成本，根据您的需求调整值。",
-    lovableSection: "应用程序开发的主要平台",
-    supabaseSection: "提供数据库的后端平台",
-    cursorSection: "AI代码编辑器",
-    results: "结果",
-    profitMargin: "利润率",
-    monthlyMaintenance: "每月维护",
-    developmentCosts: "开发成本（一次性）",
-    monthlyCosts: "每月成本",
-    total: "总计",
-    totalWithMargin: "总计（含利润）",
-    maintenance: "维护",
-    suggested: "建议",
-  },
+const languageMap = {
+  pt: { name: "Português", code: "pt" },
+  en: { name: "English", code: "en" },
+  es: { name: "Español", code: "es" },
+  it: { name: "Italiano", code: "it" },
+  fr: { name: "Français", code: "fr" },
+  de: { name: "Deutsch", code: "de" },
+  hi: { name: "हिन्दी", code: "hi" },
+  zh: { name: "中文", code: "zh" },
 };
 
 const lovablePlans = [
@@ -188,8 +49,6 @@ const DAILY_BONUS_MESSAGES = 5;
 const DAYS_IN_MONTH = 30;
 const MONTHLY_BONUS_MESSAGES = DAILY_BONUS_MESSAGES * DAYS_IN_MONTH;
 
-type DeploymentOption = "netlify" | "vercel" | "vps" | null;
-
 export const PricingCalculator = () => {
   const { toast } = useToast();
   const [lovableTokens, setLovableTokens] = useState(100);
@@ -204,7 +63,7 @@ export const PricingCalculator = () => {
   const [maintenancePercentage, setMaintenancePercentage] = useState(10);
   const [vpsPrice, setVpsPrice] = useState<number>(0);
   const [selectedCurrency, setSelectedCurrency] = useState<CurrencyOption>("USD");
-  const [selectedLanguage, setSelectedLanguage] = useState<LanguageOption>("en");
+  const [selectedLanguage, setSelectedLanguage] = useState<LanguageOption>("pt");
   const [exchangeRates, setExchangeRates] = useState<ExchangeRates>({
     BRL: 5,
     EUR: 0.85,
@@ -425,6 +284,13 @@ export const PricingCalculator = () => {
     return supabaseCost + maintenanceCost + deploymentCost;
   };
 
+  const handleLanguageChange = (language: LanguageOption) => {
+    const currentUrl = window.location.origin;
+    const targetLang = languageMap[language].code;
+    const translateUrl = `https://${window.location.hostname.replace("www.", "")}--calculator-lovable-app.translate.goog/?_x_tr_sl=auto&_x_tr_tl=${targetLang}&_x_tr_hl=pt-BR&_x_tr_pto=wapp`;
+    window.location.href = translateUrl;
+  };
+
   return (
     <div className="max-w-7xl mx-auto space-y-6 p-6">
       <div className="flex justify-center items-center gap-8 mb-12">
@@ -586,7 +452,7 @@ export const PricingCalculator = () => {
         </div>
 
         <div className="col-span-1">
-          <CalculatorSection title={translations[selectedLanguage].results} className="h-full">
+          <CalculatorSection title="Resultados" className="h-full">
             <div className="space-y-4">
               <div>
                 <label className="block text-sm mb-2">
@@ -694,22 +560,22 @@ export const PricingCalculator = () => {
 
                       <Select
                         value={selectedLanguage}
-                        onValueChange={(value: LanguageOption) => setSelectedLanguage(value)}
+                        onValueChange={(value: LanguageOption) => handleLanguageChange(value)}
                       >
                         <SelectTrigger className="w-[180px]">
-                          <SelectValue placeholder="Select language" />
+                          <SelectValue placeholder="Idioma" />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="en">
-                            <div className="flex items-center gap-2">
-                              <Globe className="w-4 h-4" />
-                              English
-                            </div>
-                          </SelectItem>
                           <SelectItem value="pt">
                             <div className="flex items-center gap-2">
-                              <Languages className="w-4 h-4" />
+                              <Globe className="w-4 h-4" />
                               Português
+                            </div>
+                          </SelectItem>
+                          <SelectItem value="en">
+                            <div className="flex items-center gap-2">
+                              <Languages className="w-4 h-4" />
+                              English
                             </div>
                           </SelectItem>
                           <SelectItem value="es">
@@ -753,7 +619,7 @@ export const PricingCalculator = () => {
                     </div>
                     {selectedCurrency !== "USD" && (
                       <p className="text-xs text-gray-400 text-center">
-                        {translations[selectedLanguage].total}: USD 1 = {selectedCurrency === "BRL" 
+                        Cotação: USD 1 = {selectedCurrency === "BRL" 
                           ? `R$ ${exchangeRates.BRL.toFixed(2)}` 
                           : `€ ${exchangeRates.EUR.toFixed(2)}`}
                       </p>
