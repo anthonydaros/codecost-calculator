@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { CalculatorSection } from "./CalculatorSection";
 import { Slider } from "@/components/ui/slider";
@@ -15,11 +16,135 @@ import { DollarSign, Euro, Globe, Languages } from "lucide-react";
 
 type CurrencyOption = "USD" | "BRL" | "EUR";
 type LanguageOption = "pt" | "en" | "es" | "it" | "fr" | "de" | "hi" | "zh";
+type DeploymentOption = "netlify" | "vercel" | "vps" | null;
 
 interface ExchangeRates {
   BRL: number;
   EUR: number;
 }
+
+const translations = {
+  pt: {
+    title: "Calculadora de Preços",
+    description: "Simule os custos de desenvolvimento e manutenção do seu projeto usando Lovable, Supabase e Cursor.",
+    lovableSection: "Configure o número de mensagens que você precisa para seu projeto. Cada plano inclui 5 mensagens bônus por dia.",
+    supabaseSection: "Configure os recursos do Supabase que você precisa para seu projeto, incluindo usuários ativos, registros no banco de dados e armazenamento.",
+    cursorSection: "Escolha o plano do Cursor que melhor atende às suas necessidades.",
+    profitMargin: "Margem de Lucro",
+    monthlyMaintenance: "Manutenção Mensal",
+    developmentCosts: "Custos de Desenvolvimento",
+    monthlyCosts: "Custos Mensais",
+    totalWithMargin: "Total com Margem",
+    maintenance: "Manutenção",
+    suggested: "Sugerido",
+    total: "Total"
+  },
+  en: {
+    title: "Pricing Calculator",
+    description: "Simulate development and maintenance costs for your project using Lovable, Supabase, and Cursor.",
+    lovableSection: "Configure the number of messages you need for your project. Each plan includes 5 bonus messages per day.",
+    supabaseSection: "Configure the Supabase resources you need for your project, including active users, database records, and storage.",
+    cursorSection: "Choose the Cursor plan that best suits your needs.",
+    profitMargin: "Profit Margin",
+    monthlyMaintenance: "Monthly Maintenance",
+    developmentCosts: "Development Costs",
+    monthlyCosts: "Monthly Costs",
+    totalWithMargin: "Total with Margin",
+    maintenance: "Maintenance",
+    suggested: "Suggested",
+    total: "Total"
+  },
+  es: {
+    title: "Calculadora de Precios",
+    description: "Simule los costos de desarrollo y mantenimiento de su proyecto usando Lovable, Supabase y Cursor.",
+    lovableSection: "Configure el número de mensajes que necesita para su proyecto. Cada plan incluye 5 mensajes de bonificación por día.",
+    supabaseSection: "Configure los recursos de Supabase que necesita para su proyecto, incluyendo usuarios activos, registros de base de datos y almacenamiento.",
+    cursorSection: "Elija el plan de Cursor que mejor se adapte a sus necesidades.",
+    profitMargin: "Margen de Beneficio",
+    monthlyMaintenance: "Mantenimiento Mensual",
+    developmentCosts: "Costos de Desarrollo",
+    monthlyCosts: "Costos Mensuales",
+    totalWithMargin: "Total con Margen",
+    maintenance: "Mantenimiento",
+    suggested: "Sugerido",
+    total: "Total"
+  },
+  it: {
+    title: "Calcolatore dei Prezzi",
+    description: "Simula i costi di sviluppo e manutenzione del tuo progetto utilizzando Lovable, Supabase e Cursor.",
+    lovableSection: "Configura il numero di messaggi necessari per il tuo progetto. Ogni piano include 5 messaggi bonus al giorno.",
+    supabaseSection: "Configura le risorse Supabase necessarie per il tuo progetto, inclusi utenti attivi, record del database e archiviazione.",
+    cursorSection: "Scegli il piano Cursor più adatto alle tue esigenze.",
+    profitMargin: "Margine di Profitto",
+    monthlyMaintenance: "Manutenzione Mensile",
+    developmentCosts: "Costi di Sviluppo",
+    monthlyCosts: "Costi Mensili",
+    totalWithMargin: "Totale con Margine",
+    maintenance: "Manutenzione",
+    suggested: "Suggerito",
+    total: "Totale"
+  },
+  fr: {
+    title: "Calculateur de Prix",
+    description: "Simulez les coûts de développement et de maintenance de votre projet en utilisant Lovable, Supabase et Cursor.",
+    lovableSection: "Configurez le nombre de messages dont vous avez besoin pour votre projet. Chaque forfait comprend 5 messages bonus par jour.",
+    supabaseSection: "Configurez les ressources Supabase dont vous avez besoin pour votre projet, y compris les utilisateurs actifs, les enregistrements de base de données et le stockage.",
+    cursorSection: "Choisissez le forfait Cursor qui convient le mieux à vos besoins.",
+    profitMargin: "Marge Bénéficiaire",
+    monthlyMaintenance: "Maintenance Mensuelle",
+    developmentCosts: "Coûts de Développement",
+    monthlyCosts: "Coûts Mensuels",
+    totalWithMargin: "Total avec Marge",
+    maintenance: "Maintenance",
+    suggested: "Suggéré",
+    total: "Total"
+  },
+  de: {
+    title: "Preisrechner",
+    description: "Simulieren Sie die Entwicklungs- und Wartungskosten Ihres Projekts mit Lovable, Supabase und Cursor.",
+    lovableSection: "Konfigurieren Sie die Anzahl der Nachrichten, die Sie für Ihr Projekt benötigen. Jeder Plan enthält 5 Bonus-Nachrichten pro Tag.",
+    supabaseSection: "Konfigurieren Sie die Supabase-Ressourcen, die Sie für Ihr Projekt benötigen, einschließlich aktiver Benutzer, Datenbankeinträge und Speicher.",
+    cursorSection: "Wählen Sie den Cursor-Plan, der am besten zu Ihren Bedürfnissen passt.",
+    profitMargin: "Gewinnmarge",
+    monthlyMaintenance: "Monatliche Wartung",
+    developmentCosts: "Entwicklungskosten",
+    monthlyCosts: "Monatliche Kosten",
+    totalWithMargin: "Gesamt mit Marge",
+    maintenance: "Wartung",
+    suggested: "Vorgeschlagen",
+    total: "Gesamt"
+  },
+  hi: {
+    title: "मूल्य कैलकुलेटर",
+    description: "Lovable, Supabase और Cursor का उपयोग करके अपने प्रोजेक्ट के विकास और रखरखाव लागत का सिमुलेशन करें।",
+    lovableSection: "अपने प्रोजेक्ट के लिए आवश्यक संदेशों की संख्या कॉन्फ़िगर करें। प्रत्येक योजना में प्रति दिन 5 बोनस संदेश शामिल हैं।",
+    supabaseSection: "अपने प्रोजेक्ट के लिए आवश्यक Supabase संसाधनों को कॉन्फ़िगर करें, जिसमें सक्रिय उपयोगकर्ता, डेटाबेस रिकॉर्ड और स्टोरेज शामिल हैं।",
+    cursorSection: "अपनी आवश्यकताओं के अनुरूप सर्वश्रेष्ठ Cursor योजना चुनें।",
+    profitMargin: "लाभ मार्जिन",
+    monthlyMaintenance: "मासिक रखरखाव",
+    developmentCosts: "विकास लागत",
+    monthlyCosts: "मासिक लागत",
+    totalWithMargin: "मार्जिन के साथ कुल",
+    maintenance: "रखरखाव",
+    suggested: "सुझाया गया",
+    total: "कुल"
+  },
+  zh: {
+    title: "价格计算器",
+    description: "使用 Lovable、Supabase 和 Cursor 模拟您项目的开发和维护成本。",
+    lovableSection: "配置项目所需的消息数量。每个计划每天包含 5 条奖励消息。",
+    supabaseSection: "配置项目所需的 Supabase 资源，包括活跃用户、数据库记录和存储。",
+    cursorSection: "选择最适合您需求的 Cursor 计划。",
+    profitMargin: "利润率",
+    monthlyMaintenance: "每月维护",
+    developmentCosts: "开发成本",
+    monthlyCosts: "每月成本",
+    totalWithMargin: "含利润总额",
+    maintenance: "维护",
+    suggested: "建议",
+    total: "总计"
+  }
+};
 
 const languageMap = {
   pt: { name: "Português", code: "pt" },
