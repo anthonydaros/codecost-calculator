@@ -410,9 +410,9 @@ export const PricingCalculator = () => {
   };
 
   const handleLanguageChange = (language: LanguageOption) => {
-    const currentUrl = window.location.origin;
-    const targetLang = languageMap[language].code;
-    const translateUrl = `https://${window.location.hostname.replace("www.", "")}--calculator-lovable-app.translate.goog/?_x_tr_sl=auto&_x_tr_tl=${targetLang}&_x_tr_hl=pt-BR&_x_tr_pto=wapp`;
+    const currentHostname = window.location.hostname;
+    const baseHostname = currentHostname.replace('.translate.goog', '');
+    const translateUrl = `https://${baseHostname}.translate.goog/?_x_tr_sl=auto&_x_tr_tl=${languageMap[language].code}&_x_tr_hl=pt-BR&_x_tr_pto=wapp`;
     window.location.href = translateUrl;
   };
 
