@@ -421,9 +421,9 @@ export const PricingCalculator = () => {
   return (
     <div className="max-w-7xl mx-auto space-y-6 p-6">
       <div className="flex justify-center items-center gap-8 mb-12">
-        <img src="/lovable icon.svg" alt="Lovable" className="w-16 h-16" />
-        <img src="/supabase-logo-icon.svg" alt="Supabase" className="w-16 h-16" />
-        <img src="/cursor logo.png" alt="Cursor" className="w-16 h-16" />
+        <img src="/public/lovable icon.svg" alt="Lovable" className="w-16 h-16" />
+        <img src="/public/supabase-logo-icon.svg" alt="Supabase" className="w-16 h-16" />
+        <img src="/public/cursor logo.png" alt="Cursor" className="w-16 h-16" />
       </div>
 
       <h1 className="text-3xl font-bold text-center mb-4 neon-glow">
@@ -766,3 +766,4 @@ export const PricingCalculator = () => {
 };
 
 export default PricingCalculator;
+
