@@ -37,6 +37,29 @@ interface TranslationMap {
     totalWithMargin: string;
     maintenance: string;
     suggested: string;
+    requiredMessages: string;
+    recommendedPlan: string;
+    limit: string;
+    price: string;
+    monthlyBonus: string;
+    messages: string;
+    deploymentOptions: string;
+    storageSize: string;
+    bandwidth: string;
+    estimatedBandwidth: string;
+    freePlan: string;
+    proPlan: string;
+    monthlyPrice: string;
+    monthlyBandwidth: string;
+    builds: string;
+    sites: string;
+    serverless: string;
+    edgeFunctions: string;
+    collaboration: string;
+    extras: string;
+    vpsMonthlyPrice: string;
+    enterVpsPrice: string;
+    monthlyVpsCost: string;
   };
 }
 
@@ -56,6 +79,29 @@ const translations: TranslationMap = {
     totalWithMargin: "Total (with margin)",
     maintenance: "Maintenance",
     suggested: "Suggested",
+    requiredMessages: "Required Messages",
+    recommendedPlan: "Recommended Plan",
+    limit: "Limit",
+    price: "Price",
+    monthlyBonus: "monthly bonus messages",
+    messages: "messages",
+    deploymentOptions: "Deployment Options",
+    storageSize: "Storage Size",
+    bandwidth: "Bandwidth",
+    estimatedBandwidth: "Current Estimate",
+    freePlan: "Free Plan",
+    proPlan: "Pro Plan",
+    monthlyPrice: "Monthly Price",
+    monthlyBandwidth: "Monthly Bandwidth",
+    builds: "Builds",
+    sites: "Sites",
+    serverless: "Serverless",
+    edgeFunctions: "Edge Functions",
+    collaboration: "Collaboration",
+    extras: "Extras",
+    vpsMonthlyPrice: "VPS Monthly Cost ($)",
+    enterVpsPrice: "Enter VPS monthly cost",
+    monthlyVpsCost: "Monthly VPS Cost",
   },
   pt: {
     title: "Calculadora de Custo para Apps No-Code",
@@ -72,6 +118,29 @@ const translations: TranslationMap = {
     totalWithMargin: "Total (com margem)",
     maintenance: "Manutenção",
     suggested: "Sugerida",
+    requiredMessages: "Mensagens Necessárias",
+    recommendedPlan: "Plano Recomendado",
+    limit: "Limite",
+    price: "Preço",
+    monthlyBonus: "mensagens bônus mensal",
+    messages: "mensagens",
+    deploymentOptions: "Opções de Deploy",
+    storageSize: "Tamanho do Armazenamento",
+    bandwidth: "Largura de Banda",
+    estimatedBandwidth: "Estimativa Atual",
+    freePlan: "Plano Gratuito",
+    proPlan: "Plano Pro",
+    monthlyPrice: "Preço Mensal",
+    monthlyBandwidth: "Banda Mensal",
+    builds: "Builds",
+    sites: "Sites",
+    serverless: "Serverless",
+    edgeFunctions: "Edge Functions",
+    collaboration: "Colaboração",
+    extras: "Extras",
+    vpsMonthlyPrice: "Custo Mensal da VPS ($)",
+    enterVpsPrice: "Digite o valor mensal da VPS",
+    monthlyVpsCost: "Custo Mensal da VPS",
   },
   es: {
     title: "Calculadora de Costos para Apps No-Code",
@@ -88,6 +157,29 @@ const translations: TranslationMap = {
     totalWithMargin: "Total (con margen)",
     maintenance: "Mantenimiento",
     suggested: "Sugerido",
+    requiredMessages: "Mensajes Requeridos",
+    recommendedPlan: "Plan Recomendado",
+    limit: "Límite",
+    price: "Precio",
+    monthlyBonus: "mensajes de bonificación mensual",
+    messages: "mensajes",
+    deploymentOptions: "Opciones de Implementación",
+    storageSize: "Tamaño de Almacenamiento",
+    bandwidth: "Ancho de Banda",
+    estimatedBandwidth: "Estimación Actual",
+    freePlan: "Plan Gratuito",
+    proPlan: "Plan Pro",
+    monthlyPrice: "Precio Mensual",
+    monthlyBandwidth: "Banda Mensual",
+    builds: "Compilaciones",
+    sites: "Sitios",
+    serverless: "Serverless",
+    edgeFunctions: "Edge Functions",
+    collaboration: "Colaboración",
+    extras: "Extras",
+    vpsMonthlyPrice: "Costo Mensual del VPS ($)",
+    enterVpsPrice: "Ingrese el costo mensual del VPS",
+    monthlyVpsCost: "Costo Mensual del VPS",
   },
   it: {
     title: "Calcolatore di Costi per App No-Code",
@@ -104,6 +196,29 @@ const translations: TranslationMap = {
     totalWithMargin: "Totale (con margine)",
     maintenance: "Manutenzione",
     suggested: "Suggerito",
+    requiredMessages: "Messaggi Richiesti",
+    recommendedPlan: "Piano Consigliato",
+    limit: "Limite",
+    price: "Prezzo",
+    monthlyBonus: "messaggi bonus mensili",
+    messages: "messaggi",
+    deploymentOptions: "Opzioni di Deployment",
+    storageSize: "Dimensione Archiviazione",
+    bandwidth: "Larghezza di Banda",
+    estimatedBandwidth: "Stima Attuale",
+    freePlan: "Piano Gratuito",
+    proPlan: "Piano Pro",
+    monthlyPrice: "Prezzo Mensile",
+    monthlyBandwidth: "Banda Mensile",
+    builds: "Build",
+    sites: "Siti",
+    serverless: "Serverless",
+    edgeFunctions: "Edge Functions",
+    collaboration: "Collaborazione",
+    extras: "Extra",
+    vpsMonthlyPrice: "Costo Mensile VPS ($)",
+    enterVpsPrice: "Inserisci il costo mensile VPS",
+    monthlyVpsCost: "Costo Mensile VPS",
   },
   fr: {
     title: "Calculateur de Coûts pour Apps No-Code",
@@ -120,6 +235,29 @@ const translations: TranslationMap = {
     totalWithMargin: "Total (avec marge)",
     maintenance: "Maintenance",
     suggested: "Suggéré",
+    requiredMessages: "Messages Requis",
+    recommendedPlan: "Plan Recommandé",
+    limit: "Limite",
+    price: "Prix",
+    monthlyBonus: "messages bonus mensuels",
+    messages: "messages",
+    deploymentOptions: "Options de Déploiement",
+    storageSize: "Taille de Stockage",
+    bandwidth: "Bande Passante",
+    estimatedBandwidth: "Estimation Actuelle",
+    freePlan: "Plan Gratuit",
+    proPlan: "Plan Pro",
+    monthlyPrice: "Prix Mensuel",
+    monthlyBandwidth: "Bande Passante Mensuelle",
+    builds: "Builds",
+    sites: "Sites",
+    serverless: "Serverless",
+    edgeFunctions: "Edge Functions",
+    collaboration: "Collaboration",
+    extras: "Extras",
+    vpsMonthlyPrice: "Coût Mensuel VPS ($)",
+    enterVpsPrice: "Entrez le coût mensuel VPS",
+    monthlyVpsCost: "Coût Mensuel VPS",
   },
   de: {
     title: "Kostenrechner für No-Code Apps",
@@ -136,6 +274,29 @@ const translations: TranslationMap = {
     totalWithMargin: "Gesamt (mit Marge)",
     maintenance: "Wartung",
     suggested: "Vorgeschlagen",
+    requiredMessages: "Erforderliche Nachrichten",
+    recommendedPlan: "Empfohlener Plan",
+    limit: "Limit",
+    price: "Preis",
+    monthlyBonus: "monatliche Bonus-Nachrichten",
+    messages: "Nachrichten",
+    deploymentOptions: "Bereitstellungsoptionen",
+    storageSize: "Speichergröße",
+    bandwidth: "Bandbreite",
+    estimatedBandwidth: "Aktuelle Schätzung",
+    freePlan: "Kostenloser Plan",
+    proPlan: "Pro Plan",
+    monthlyPrice: "Monatlicher Preis",
+    monthlyBandwidth: "Monatliche Bandbreite",
+    builds: "Builds",
+    sites: "Websites",
+    serverless: "Serverless",
+    edgeFunctions: "Edge Functions",
+    collaboration: "Zusammenarbeit",
+    extras: "Extras",
+    vpsMonthlyPrice: "Monatliche VPS-Kosten ($)",
+    enterVpsPrice: "Geben Sie die monatlichen VPS-Kosten ein",
+    monthlyVpsCost: "Monatliche VPS-Kosten",
   },
   hi: {
     title: "नो-कोड ऐप्स के लिए लागत कैलकुलेटर",
@@ -152,6 +313,29 @@ const translations: TranslationMap = {
     totalWithMargin: "कुल (मार्जिन के साथ)",
     maintenance: "रखरखाव",
     suggested: "सुझाया गया",
+    requiredMessages: "आवश्यक संदेश",
+    recommendedPlan: "अनुशंसित योजना",
+    limit: "सीमा",
+    price: "मूल्य",
+    monthlyBonus: "मासिक बोनस संदेश",
+    messages: "संदेश",
+    deploymentOptions: "डिप्लॉयमेंट विकल्प",
+    storageSize: "स्टोरेज आकार",
+    bandwidth: "बैंडविड्थ",
+    estimatedBandwidth: "वर्तमान अनुमान",
+    freePlan: "नि:शुल्क योजना",
+    proPlan: "प्रो योजना",
+    monthlyPrice: "मासिक मूल्य",
+    monthlyBandwidth: "मासिक बैंडविड्थ",
+    builds: "बिल्ड्स",
+    sites: "साइट्स",
+    serverless: "सर्वरलेस",
+    edgeFunctions: "एज फंक्शंस",
+    collaboration: "सहयोग",
+    extras: "अतिरिक्त",
+    vpsMonthlyPrice: "वीपीएस मासिक लागत ($)",
+    enterVpsPrice: "वीपीएस मासिक लागत दर्ज करें",
+    monthlyVpsCost: "वीपीएस मासिक लागत",
   },
   zh: {
     title: "无代码应用成本计算器",
@@ -168,6 +352,29 @@ const translations: TranslationMap = {
     totalWithMargin: "总计（含利润）",
     maintenance: "维护",
     suggested: "建议",
+    requiredMessages: "所需消息数",
+    recommendedPlan: "推荐方案",
+    limit: "限制",
+    price: "价格",
+    monthlyBonus: "每月奖励消息",
+    messages: "消息",
+    deploymentOptions: "部署选项",
+    storageSize: "存储大小",
+    bandwidth: "带宽",
+    estimatedBandwidth: "当前估算",
+    freePlan: "免费方案",
+    proPlan: "专业方案",
+    monthlyPrice: "月度价格",
+    monthlyBandwidth: "月度带宽",
+    builds: "构建次数",
+    sites: "站点数",
+    serverless: "无服务器",
+    edgeFunctions: "边缘函数",
+    collaboration: "协作",
+    extras: "额外功能",
+    vpsMonthlyPrice: "VPS月度成本 ($)",
+    enterVpsPrice: "输入VPS月度成本",
+    monthlyVpsCost: "VPS月度成本",
   },
 };
 
@@ -364,14 +571,14 @@ export const PricingCalculator = () => {
           <div className="mt-4 p-4 bg-white/5 rounded-lg space-y-2">
             <h4 className="font-semibold">Netlify Free</h4>
             <p className="text-sm text-gray-400">
-              Preço: Gratuito<br />
-              Banda: 100 GB/mês<br />
-              Builds: 300 min/mês<br />
-              Sites: Até 500<br />
-              Serverless: 125k invocações/mês<br />
-              Edge Functions: 1M invocações/mês<br />
-              Colaboração: 1 membro (Git ilimitado)<br />
-              Extras: Pré-visualizações, reversões instantâneas
+              {translations[selectedLanguage].price}: Gratuito<br />
+              {translations[selectedLanguage].monthlyBandwidth}: 100 GB/mês<br />
+              {translations[selectedLanguage].builds}: 300 min/mês<br />
+              {translations[selectedLanguage].sites}: Até 500<br />
+              {translations[selectedLanguage].serverless}: 125k invocações/mês<br />
+              {translations[selectedLanguage].edgeFunctions}: 1M invocações/mês<br />
+              {translations[selectedLanguage].collaboration}: 1 membro (Git ilimitado)<br />
+              {translations[selectedLanguage].extras}: Pré-visualizações, reversões instantâneas
             </p>
           </div>
         );
@@ -380,14 +587,14 @@ export const PricingCalculator = () => {
           <div className="mt-4 p-4 bg-white/5 rounded-lg space-y-2">
             <h4 className="font-semibold">Vercel Hobby</h4>
             <p className="text-sm text-gray-400">
-              Preço: Gratuito<br />
-              Banda: 100 GB/mês<br />
-              Builds: 6.000 min/mês<br />
-              Projetos: Até 200<br />
-              Serverless: 100k invocações/mês<br />
-              Edge Functions: 1M invocações/mês<br />
-              Colaboração: Sem equipe<br />
-              Extras: CI/CD, insights, mitigação DDoS, firewall
+              {translations[selectedLanguage].price}: Gratuito<br />
+              {translations[selectedLanguage].monthlyBandwidth}: 100 GB/mês<br />
+              {translations[selectedLanguage].builds}: 6.000 min/mês<br />
+              {translations[selectedLanguage].sites}: Até 200<br />
+              {translations[selectedLanguage].serverless}: 100k invocações/mês<br />
+              {translations[selectedLanguage].edgeFunctions}: 1M invocações/mês<br />
+              {translations[selectedLanguage].collaboration}: Sem equipe<br />
+              {translations[selectedLanguage].extras}: CI/CD, insights, mitigação DDoS, firewall
             </p>
           </div>
         );
@@ -396,14 +603,14 @@ export const PricingCalculator = () => {
           <div className="mt-4 p-4 bg-white/5 rounded-lg space-y-3">
             <h4 className="font-semibold">VPS Customizada</h4>
             <div className="space-y-2">
-              <label className="text-sm text-gray-400">Custo mensal da VPS ($)</label>
+              <label className="text-sm text-gray-400">{translations[selectedLanguage].vpsMonthlyPrice}</label>
               <Input
                 type="number"
                 min="0"
                 value={vpsPrice}
                 onChange={(e) => setVpsPrice(Number(e.target.value))}
                 className="w-full"
-                placeholder="Digite o valor mensal da VPS"
+                placeholder={translations[selectedLanguage].enterVpsPrice}
               />
             </div>
           </div>
@@ -451,7 +658,7 @@ export const PricingCalculator = () => {
             <div className="space-y-4">
               <div>
                 <label className="block text-sm mb-2">
-                  Mensagens necessárias: {lovableTokens.toLocaleString()}
+                  {translations[selectedLanguage].requiredMessages}: {lovableTokens.toLocaleString()}
                 </label>
                 <Slider
                   value={[lovableTokens]}
@@ -461,18 +668,18 @@ export const PricingCalculator = () => {
                 />
               </div>
               <div className="bg-white/5 p-4 rounded-lg">
-                <p className="text-sm text-gray-300">Plano Recomendado:</p>
+                <p className="text-sm text-gray-300">{translations[selectedLanguage].recommendedPlan}:</p>
                 <p className="text-lg font-semibold">{recommendedPlan.name}</p>
                 <p className="text-sm text-gray-400">
-                  Limite: {recommendedPlan.messages.toLocaleString()} mensagens
-                  {recommendedPlan.price > 0 && ` + ${MONTHLY_BONUS_MESSAGES} mensagens bônus mensal`}
+                  {translations[selectedLanguage].limit}: {recommendedPlan.messages.toLocaleString()} {translations[selectedLanguage].messages}
+                  {recommendedPlan.price > 0 && ` + ${MONTHLY_BONUS_MESSAGES} ${translations[selectedLanguage].monthlyBonus}`}
                 </p>
                 <p className="text-sm text-gray-400">
-                  Preço: {formatCurrency(recommendedPlan.price)}
+                  {translations[selectedLanguage].price}: {formatCurrency(recommendedPlan.price)}
                 </p>
               </div>
               <div className="space-y-2">
-                <p className="text-sm font-semibold">Opções de Deploy:</p>
+                <p className="text-sm font-semibold">{translations[selectedLanguage].deploymentOptions}:</p>
                 <div className="flex gap-2">
                   <Button
                     variant={selectedDeployment === "netlify" ? "default" : "outline"}
@@ -545,231 +752,15 @@ export const PricingCalculator = () => {
                 </p>
               </div>
               <div className="mt-4 p-4 bg-white/5 rounded-lg space-y-2">
-                <p className="text-sm text-gray-400">Largura de Banda Estimada:</p>
+                <p className="text-sm text-gray-400">{translations[selectedLanguage].bandwidth}:</p>
                 <div className="space-y-1">
                   <p className="text-xs text-gray-500">
-                    Free Plan: 5 GB bandwidth
+                    {translations[selectedLanguage].freePlan}: 5 GB bandwidth
                   </p>
                   <p className="text-xs text-gray-500">
-                    Pro Plan ({formatCurrency(25)}): 25 GB bandwidth + {formatCurrency(0.09)} por GB adicional após 8GB
+                    {translations[selectedLanguage].proPlan} ({formatCurrency(25)}): 25 GB bandwidth + {formatCurrency(0.09)} por GB adicional após 8GB
                   </p>
                   <p className="text-sm font-medium">
-                    Estimativa atual: {Math.ceil(supabaseRecords / 2700000)} GB
+                    {translations[selectedLanguage].estimatedBandwidth}: {Math.ceil(supabaseRecords / 2700000)} GB
                   </p>
                 </div>
-              </div>
-            </div>
-          </CalculatorSection>
-
-          <CalculatorSection 
-            title="Cursor" 
-            color="#FF4D4D"
-            icon="/cursor logo.png"
-            description={translations[selectedLanguage].cursorSection}
-          >
-            <div className="space-y-4">
-              <div>
-                <label className="block text-sm mb-2">Plano</label>
-                <Select value={cursorPlan} onValueChange={setCursorPlan}>
-                  <SelectTrigger>
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="Hobby">Hobby (Grátis)</SelectItem>
-                    <SelectItem value="Pro">Pro ($20/mês)</SelectItem>
-                    <SelectItem value="Business">Business ($40/mês)</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-            </div>
-          </CalculatorSection>
-        </div>
-
-        <div className="col-span-1">
-          <CalculatorSection title={translations[selectedLanguage].results} className="h-full">
-            <div className="space-y-4">
-              <div>
-                <label className="block text-sm mb-2">
-                  {translations[selectedLanguage].profitMargin}: {profitMargin}%
-                </label>
-                <Slider
-                  value={[profitMargin]}
-                  onValueChange={([value]) => setProfitMargin(value)}
-                  max={500}
-                  step={10}
-                />
-              </div>
-              <div>
-                <label className="block text-sm mb-2">
-                  {translations[selectedLanguage].monthlyMaintenance}: {maintenancePercentage}%
-                </label>
-                <Slider
-                  value={[maintenancePercentage]}
-                  onValueChange={([value]) => setMaintenancePercentage(value)}
-                  max={300}
-                  step={5}
-                />
-              </div>
-              <div className="pt-4 border-t border-white/10">
-                <div className="space-y-4">
-                  <div>
-                    <p className="text-lg font-semibold border-b border-white/10 pb-2">
-                      {translations[selectedLanguage].developmentCosts}
-                    </p>
-                    <div className="space-y-2 mt-2">
-                      <div>
-                        <p className="text-sm text-gray-400">Lovable.dev</p>
-                        <p className="text-lg">{formatCurrency(calculateLovableCost())}</p>
-                      </div>
-                      <div>
-                        <p className="text-sm text-gray-400">Cursor</p>
-                        <p className="text-lg">{formatCurrency(calculateCursorCost())}</p>
-                      </div>
-                      <div className="pt-2 border-t border-white/10">
-                        <p className="text-sm text-gray-400">{translations[selectedLanguage].totalWithMargin}</p>
-                        <p className="text-lg font-bold neon-glow">
-                          {formatCurrency(calculateDevelopmentTotalWithMargin())}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                  
-                  <div className="w-full h-px bg-gradient-to-r from-transparent via-white/50 to-transparent my-6 shadow-[0_0_5px_rgba(255,255,255,0.5)] animate-pulse" />
-                  
-                  <div>
-                    <p className="text-lg font-semibold border-b border-white/10 pb-2">
-                      {translations[selectedLanguage].monthlyCosts}
-                    </p>
-                    <div className="space-y-2 mt-2">
-                      <div>
-                        <p className="text-sm text-gray-400">Supabase</p>
-                        <p className="text-lg">{formatCurrency(calculateSupabaseCost())}</p>
-                      </div>
-                      {maintenancePercentage > 0 && (
-                        <div>
-                          <p className="text-sm text-gray-400">{translations[selectedLanguage].maintenance} {translations[selectedLanguage].suggested}</p>
-                          <p className="text-lg">
-                            {formatCurrency((calculateDevelopmentCost() * maintenancePercentage) / 100)}
-                          </p>
-                        </div>
-                      )}
-                      <div className="pt-2 border-t border-white/10">
-                        <p className="text-sm text-gray-400">{translations[selectedLanguage].total}</p>
-                        <p className="text-lg font-bold neon-glow">
-                          {formatCurrency(calculateMonthlyTotalWithMargin())}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="pt-4 border-t border-white/10 flex flex-col gap-4">
-                    <div className="flex gap-2">
-                      <Select
-                        value={selectedCurrency}
-                        onValueChange={(value: CurrencyOption) => setSelectedCurrency(value)}
-                      >
-                        <SelectTrigger className="w-[180px]">
-                          <SelectValue placeholder="Select currency" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="USD">
-                            <div className="flex items-center gap-2">
-                              <DollarSign className="w-4 h-4" />
-                              USD
-                            </div>
-                          </SelectItem>
-                          <SelectItem value="BRL">
-                            <div className="flex items-center gap-2">
-                              <span className="font-bold">R$</span>
-                              BRL
-                            </div>
-                          </SelectItem>
-                          <SelectItem value="EUR">
-                            <div className="flex items-center gap-2">
-                              <Euro className="w-4 h-4" />
-                              EUR
-                            </div>
-                          </SelectItem>
-                        </SelectContent>
-                      </Select>
-
-                      <Select
-                        value={selectedLanguage}
-                        onValueChange={(value: LanguageOption) => setSelectedLanguage(value)}
-                      >
-                        <SelectTrigger className="w-[180px]">
-                          <SelectValue placeholder="Select language" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="en">
-                            <div className="flex items-center gap-2">
-                              <Globe className="w-4 h-4" />
-                              English
-                            </div>
-                          </SelectItem>
-                          <SelectItem value="pt">
-                            <div className="flex items-center gap-2">
-                              <Languages className="w-4 h-4" />
-                              Português
-                            </div>
-                          </SelectItem>
-                          <SelectItem value="es">
-                            <div className="flex items-center gap-2">
-                              <Languages className="w-4 h-4" />
-                              Español
-                            </div>
-                          </SelectItem>
-                          <SelectItem value="it">
-                            <div className="flex items-center gap-2">
-                              <Languages className="w-4 h-4" />
-                              Italiano
-                            </div>
-                          </SelectItem>
-                          <SelectItem value="fr">
-                            <div className="flex items-center gap-2">
-                              <Languages className="w-4 h-4" />
-                              Français
-                            </div>
-                          </SelectItem>
-                          <SelectItem value="de">
-                            <div className="flex items-center gap-2">
-                              <Languages className="w-4 h-4" />
-                              Deutsch
-                            </div>
-                          </SelectItem>
-                          <SelectItem value="hi">
-                            <div className="flex items-center gap-2">
-                              <Languages className="w-4 h-4" />
-                              हिन्दी
-                            </div>
-                          </SelectItem>
-                          <SelectItem value="zh">
-                            <div className="flex items-center gap-2">
-                              <Languages className="w-4 h-4" />
-                              中文
-                            </div>
-                          </SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
-                    {selectedCurrency !== "USD" && (
-                      <p className="text-xs text-gray-400 text-center">
-                        {translations[selectedLanguage].total}: USD 1 = {selectedCurrency === "BRL" 
-                          ? `R$ ${exchangeRates.BRL.toFixed(2)}` 
-                          : `€ ${exchangeRates.EUR.toFixed(2)}`}
-                      </p>
-                    )}
-                  </div>
-                </div>
-              </div>
-            </div>
-          </CalculatorSection>
-        </div>
-      </div>
-      <footer className="mt-12 text-center text-gray-400">
-        Desenvolvido por Anthony Max
-      </footer>
-    </div>
-  );
-};
-
-export default PricingCalculator;
