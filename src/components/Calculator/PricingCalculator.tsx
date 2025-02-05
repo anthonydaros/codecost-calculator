@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { CalculatorSection } from "./CalculatorSection";
 import { Slider } from "@/components/ui/slider";
@@ -421,9 +420,9 @@ export const PricingCalculator = () => {
   return (
     <div className="max-w-7xl mx-auto space-y-6 p-6">
       <div className="flex justify-center items-center gap-8 mb-12">
-        <img src="/lovable-icon.svg" alt="Lovable" className="w-16 h-16" />
-        <img src="/supabase-logo-icon.svg" alt="Supabase" className="w-16 h-16" />
-        <img src="/cursor-logo.png" alt="Cursor" className="w-16 h-16" />
+        <img src="/lovableicon.svg" alt="Lovable" className="w-16 h-16" />
+        <img src="/supabaselogo.svg" alt="Supabase" className="w-16 h-16" />
+        <img src="/cursorlogo.png" alt="Cursor" className="w-16 h-16" />
       </div>
 
       <h1 className="text-3xl font-bold text-center mb-4 neon-glow">
@@ -438,7 +437,7 @@ export const PricingCalculator = () => {
           <CalculatorSection 
             title="Lovable.dev" 
             color="#646cff"
-            icon="/lovable icon.svg"
+            icon="/lovableicon.svg"
             description={translations[selectedLanguage].lovableSection}
           >
             <div className="space-y-4">
@@ -494,7 +493,7 @@ export const PricingCalculator = () => {
           <CalculatorSection 
             title="Supabase" 
             color="#3ECF8E"
-            icon="/supabase-logo-icon.svg"
+            icon="/supabaselogo.svg"
             description={translations[selectedLanguage].supabaseSection}
           >
             <div className="space-y-4">
@@ -557,7 +556,7 @@ export const PricingCalculator = () => {
           <CalculatorSection 
             title="Cursor" 
             color="#FF4D4D"
-            icon="/cursor logo.png"
+            icon="/cursorlogo.png"
             description={translations[selectedLanguage].cursorSection}
           >
             <div className="space-y-4">
@@ -766,4 +765,3 @@ export const PricingCalculator = () => {
 };
 
 export default PricingCalculator;
-
